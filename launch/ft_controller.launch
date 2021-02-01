@@ -1,0 +1,54 @@
+<launch>
+
+  <arg name="HAND" default="left" />
+  <arg name="NUM" default="0" />
+  <arg name="CONTROLLER" default="sim" />
+  <arg name="RESPAWN" default="true" />
+  <arg name="VISUALIZE" default="true" />
+  <arg name="BIOTAC" default="false" />
+  <arg name="GAZEBO" default="false"/>
+  <arg name="URDF" default="$(find allegro_toolkit)/models/urdf/allegro_left.urdf" unless="$(arg BIOTAC)"/>
+  <arg name="URDF" default="$(find allegro_toolkit)/models/urdf/allegro_left_biotac.urdf" if="$(arg BIOTAC)"/>
+  <arg name="ZEROS" default="$(find allegro_hand_parameters)/zero.yaml" />
+
+  <arg name="AUTO_CAN" default="true" />  <!--If true, ignores CAN_DEVICE. -->
+  <arg name="CAN_DEVICE" default="/dev/pcanusb1" />
+  <arg name="JSP_GUI" default="false" />
+  <arg name="KEYBOARD" default="false" />
+  <!-- <arg name="GAZEBO" default="false" />  use at your own risk -->
+  
+
+  <include file="$(find allegro_hand_controllers)/launch/allegro_hand.launch">
+    <arg name="HAND" value="$(arg HAND)"/>
+    <arg name="NUM" value="$(arg NUM)"/>
+    <arg name="CONTROLLER" value="$(arg CONTROLLER)"/>
+    <arg name="RESPAWN" value="$(arg RESPAWN)"/>
+    <arg name="VISUALIZE" value="$(arg VISUALIZE)"/>
+    <arg name="ZEROS" value="$(arg ZEROS)"/>
+    <arg name="AUTO_CAN" value="$(arg AUTO_CAN)"/>
+    <arg name="CAN_DEVICE" value="$(arg CAN_DEVICE)"/>
+    <arg name="JSP_GUI" value="$(arg JSP_GUI)"/>
+    <arg name="KEYBOARD" value="$(arg KEYBOARD)"/>
+    <arg name="GAZEBO" value="$(arg GAZEBO)"/>
+  </include>
+
+
+  <node name="hand_ft_controller" pkg="allegro_toolkit" type="hand_ft_controller" output="screen" args="$(arg URDF)">
+
+    <!-- Remapping of topics into enumerated allegroHand_# namespace -->
+    <!-- <remap from="allegroHand_0/joint_states" to="allegroHand_$(arg NUM)/joint_states"/>
+    <remap from="allegroHand_0/joint_cmd" to="allegroHand_$(arg NUM)/joint_cmd"/>
+    <remap from="allegroHand_0/torque_cmd" to="allegroHand_$(arg NUM)/torque_cmd"/>
+    <remap from="allegroHand_0/desiredJointState" to="allegroHand_$(arg NUM)/desiredJointState"/> -->
+
+    <remap from="allegroHand_0/ft_pose_cmd" to="allegroHand_$(arg NUM)/ft_pose_cmd"/>
+    <remap from="allegroHand_0/ft_torque_cmd" to="allegroHand_$(arg NUM)/ft_torque_cmd"/>
+    <remap from="allegroHand_0/ft_pos" to="allegroHand_$(arg NUM)/ft_pos"/>
+    <remap from="allegroHand_0/Gravity_direction" to="allegroHand_$(arg NUM)/Gravity_direction"/>
+    <remap from="allegroHand_0/Bendingness" to="allegroHand_$(arg NUM)/Bendingness"/>
+    <remap from="allegroHand_0/SpeedGains" to="allegroHand_$(arg NUM)/SpeedGains"/>
+    
+  </node>
+
+
+</launch>
