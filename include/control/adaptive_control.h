@@ -24,6 +24,7 @@ namespace control{
             Eigen::MatrixXd B_r;
             Eigen::MatrixXd P_l;
             Eigen::MatrixXd Gamma;
+            Eigen::VectorXd Imp;
             std::vector<Eigen::MatrixXd> Px;
             std::vector<Eigen::MatrixXd> Pr;
             std::vector<Eigen::MatrixXd> Pf;

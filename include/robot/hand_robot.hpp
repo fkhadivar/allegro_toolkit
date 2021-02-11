@@ -66,9 +66,6 @@ namespace robot{
 
         Eigen::VectorXd getFingerInvKinematic(size_t i, const Eigen::VectorXd& pos);
 
-
-        
-
         std::vector<Finger> finger;
       protected:
         // Fingers:
