@@ -23,9 +23,9 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   message_generation
-  passive_ds_control
   biotac_ros
   utils
+  gazebo_ros
 )
 
 list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR} )
@@ -50,7 +50,7 @@ find_package(qpOASES QUIET)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS roscpp rospy std_msgs sensor_msgs geometry_msgs message_generation passive_ds_control biotac_ros
+  CATKIN_DEPENDS roscpp rospy std_msgs sensor_msgs geometry_msgs message_generation biotac_ros
 )
 
 
@@ -74,19 +74,19 @@ target_include_directories(ad_control PUBLIC include ${catkin_INCLUDE_DIRS} ${Ei
 target_link_libraries(ad_control ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
 add_dependencies(ad_control ${PROJECT_NAME}_gencpp)
 
-add_executable(hand_ft_controller src/hand_ft_controller_node.cpp src/robot/hand_robot.cpp src/control/hand_ft_controller.cpp src/control/qp_solver.cpp)
+add_executable(hand_ft_controller src/hand_ft_controller_node.cpp src/robot/hand_robot.cpp src/control/hand_ft_controller.cpp src/control/qp_solver.cpp src/control/control_util.cpp)
 target_include_directories(hand_ft_controller PUBLIC include ${catkin_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${qpOASES_INCLUDE_DIRS})
 target_link_libraries(hand_ft_controller ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
 add_dependencies(hand_ft_controller ${PROJECT_NAME}_gencpp)
 
 
-add_executable(hand_torque_sim src/hand_torque_sim_node.cpp src/robot/hand_robot.cpp src/control/hand_ft_controller.cpp src/control/qp_solver.cpp src/third_party/sg_filter.cpp)
+add_executable(hand_torque_sim src/hand_torque_sim_node.cpp src/robot/hand_robot.cpp src/control/hand_ft_controller.cpp src/control/qp_solver.cpp src/third_party/sg_filter.cpp src/control/control_util.cpp)
 target_include_directories(hand_torque_sim PUBLIC include ${catkin_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${qpOASES_INCLUDE_DIRS})
 target_link_libraries(hand_torque_sim ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
 add_dependencies(hand_torque_sim ${PROJECT_NAME}_gencpp)
 
-FILE(GLOB SRCS src/control/adaptive_control.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/robot/hand_robot.cpp )
-FILE(GLOB INCS include/control/adaptive_control.h include/control/qp_solver.hpp include/control/control_util.h include/robot/hand_robot.hpp include/robot/abs_robot.hpp include/control/abs_control.hpp)
+FILE(GLOB SRCS src/control/adaptive_control.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/robot/hand_robot.cpp src/motion_capture.cpp)
+FILE(GLOB INCS include/control/adaptive_control.h include/control/qp_solver.hpp include/control/control_util.h include/robot/hand_robot.hpp include/robot/abs_robot.hpp include/control/abs_control.hpp src/motion_capture.h)
 
 add_library(${PROJECT_NAME} ${SRCS} ${INCS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})

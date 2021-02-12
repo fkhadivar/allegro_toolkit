@@ -172,8 +172,11 @@ namespace robot{
     Eigen::Vector3d Hand::getFingerPos(size_t i){
         return finger[i].task_states.pos;
     }
+    Eigen::Vector4d Hand::getFingerJointPos(size_t i){
+        return finger[i].joint_states.pos;
+    }
 
-    Eigen::Vector4d Hand::getFingerOrientation(size_t i){
+    Eigen::Vector4d Hand::getFingerQuat(size_t i){
         Eigen::Vector4d tt_orintation = Utils<double>::rotationMatrixToQuaternion(finger[i].rotMat);
         return tt_orintation;
     }
@@ -190,12 +193,31 @@ namespace robot{
         return finger[i].full_Jacobian;
     }
 
+
     Eigen::Vector3d Hand::getFingerVel(size_t i){
         return finger[i].task_states.vel;
     }
     Eigen::MatrixXd Hand::getFingerJacob(size_t i){
         return finger[i].jacobian;
     }
+    Eigen::MatrixXd Hand::getFingerJacobQ(size_t i){
+        return finger[i].full_Jacobian.block(0,4*i,3,4);
+    }
+
+    Eigen::MatrixXd Hand::getJacob(){
+        Eigen::MatrixXd Jacobs = Eigen::MatrixXd::Zero(_fingersNum*3,_eachFingerDof*_fingersNum);
+            for (size_t i = 0; i < _fingersNum; i++)
+                Jacobs.block(3*i,4*i,3,4) = finger[i].jacobian;
+        return Jacobs;
+    }
+    Eigen::MatrixXd Hand::getJacobDerivative(){
+        Eigen::VectorXd jdot_qdot = Eigen::VectorXd::Zero(_fingersNum*3);
+            for (size_t i = 0; i < _fingersNum*3; i++){
+                jdot_qdot.segment(3*i,3) = getContactHessians(i).transpose();
+            }
+        return jdot_qdot;
+    }
+
 
     Eigen::VectorXd Hand::getFingerInvKinematic(size_t i, const Eigen::VectorXd& pos){
         Eigen::Vector3d local_point (0., 0., 0.);

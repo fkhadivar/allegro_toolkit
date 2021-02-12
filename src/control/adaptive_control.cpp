@@ -27,6 +27,10 @@ namespace control{
         ADControl::ADControl(const std::shared_ptr<robot::AbsRobot>& _robot, Params& _params, double _dt):params(_params), dt(_dt){
             addRobot(_robot);
             _QP = std::make_shared<control::util::QP>();
+            for (size_t i = 0; i < 4; i++){
+                _AD.push_back(std::make_shared<control::util::Adaptive>(8));
+            }
+            
         }
         ADControl::~ADControl(){};
         void ADControl::setInput(){}
@@ -89,93 +93,6 @@ namespace control{
         }
 
         //********************************************************
-        void ADControl::init_adaptive(const size_t& ad_ssize){
-
-            size_t numfingers = std::static_pointer_cast<robot::Hand>(robots[0])->finger.size();
-            size_t ad_hsize = ad_ssize/2;
-            Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,0.001);
-            adGains(1) *= 2.;
-            adGains(2) *= 2.;
-            adGains(3) *= 1.;
-            ad_params.Gamma = adGains.asDiagonal();
-            for (size_t i = 0; i < numfingers; i++){
-                    ad_params.Px.push_back(0.*Eigen::MatrixXd::Identity(ad_hsize,ad_ssize));
-                    ad_params.Pr.push_back(0.*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize));
-                    // Pf.push_back(Eigen::MatrixXd::Zero(ad_hsize,phi.size()));
-            }
-
-            ad_params.A_r = Eigen::MatrixXd::Zero(ad_ssize,ad_ssize);
-            ad_params.A_r.block(0,ad_hsize,ad_hsize,ad_hsize) = Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-            ad_params.A_r.block(ad_hsize,0,ad_hsize,ad_hsize) = -200.*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-            ad_params.A_r.block(ad_hsize,ad_hsize,ad_hsize,ad_hsize) = -100.*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-            ad_params.P_l = Eigen::MatrixXd::Identity(ad_ssize,ad_ssize);
-            ad_params.P_l.block(0,0,ad_hsize,ad_hsize) = 2*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-            ad_params.P_l.block(ad_hsize,ad_hsize,ad_hsize,ad_hsize) = 2*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-            ad_params.B_r = Eigen::MatrixXd::Zero(ad_ssize,ad_hsize);
-            ad_params.B_r.block(0,0,ad_hsize,ad_hsize) = Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
-        }
-
-        Eigen::VectorXd ADControl::update_adaptive(const size_t& ind, const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state ){
-            Eigen::VectorXd psi = c_state;
-            Eigen::VectorXd psi_d = d_state;
-            
-            Eigen::VectorXd rt= -ad_params.B_r.transpose() * ad_params.A_r * psi_d;
-            Eigen::VectorXd er = psi - psi_d;
-            if (er.norm() > 0.4){
-                er = 0.4*er.normalized();
-            }else if (er.norm() < 0.04){
-                er = 0.*er;
-            }
-            // Eigen::VectorXd phi_er = Eigen::VectorXd::Zero(phi.size());
-            // for (size_t j = 0; j < phi_er.size(); j++){
-            //     double theta = (1/(ker_sig*ker_sig))*(er.segment(0,ad_hsize) - phi[j]).transpose()*(er.segment(0,ad_hsize) - phi[j]);
-            //     phi_er(j) = std::exp(-theta);
-            // }
-            Eigen::MatrixXd ThetaX = Eigen::MatrixXd::Zero(4,4);
-            Eigen::MatrixXd ThetaR = Eigen::MatrixXd::Zero(4,4);
-            Eigen::VectorXd Nd(4);
-            Nd << 0.01, 0.1, 0.1, 0.01;
-            
-            for (size_t j = 0; j < 4; j++)
-            {   double ker_sig = 0.02;
-                double alp_e = std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
-                double normX = ad_params.Px[ind].row(j).norm();
-                double normR = ad_params.Pr[ind].row(j).norm(); 
-                if (normX < 1e-4){
-                    normX = 1.;
-                    alp_e = 0;
-                }
-                if(normR < 1e-4){
-                    normR = 1.;
-                    alp_e = 0;
-                }
-                ThetaX(j,j) = alp_e * (1. - Nd(j)/normX);
-                ThetaR(j,j) = alp_e * (1. - Nd(j)/normR);
-            }
-            
-
-            double maxValue = 200.;
-            auto Px = ad_params.Px[ind];
-            auto Pr = ad_params.Pr[ind];
-            ad_params.Px[ind] -= ad_params.Gamma * ad_params.B_r.transpose()* ad_params.P_l * er *  psi.transpose() + ThetaX * Px;                     
-            ad_params.Pr[ind] -= ad_params.Gamma * ad_params.B_r.transpose()* ad_params.P_l * er *  rt.transpose()  + ThetaR * Pr;
-            // Pf[i] -= gainConst * B_r.transpose()* P_l * er *  phi_er.transpose();
-
-            for (size_t j = 0; j < ad_params.Px[ind].rows(); j++){
-                for (size_t k = 0; k < ad_params.Px[ind].cols(); k++){
-                    if(ad_params.Px[ind](j,k) > maxValue){ ad_params.Px[ind](j,k) = maxValue;} 
-                    else if(ad_params.Px[ind](j,k) < -maxValue){ad_params.Px[ind](j,k) = -maxValue;}
-                }
-            }
-            for (size_t j = 0; j < ad_params.Pr[ind].rows(); j++){
-                for (size_t k = 0; k < ad_params.Pr[ind].cols(); k++){
-                    if(ad_params.Pr[ind](j,k) > maxValue){ ad_params.Pr[ind](j,k) = maxValue;} 
-                    else if(ad_params.Pr[ind](j,k) < -maxValue){ad_params.Pr[ind](j,k) = -maxValue;}
-                }
-            }
-            return ad_params.Px[ind] * psi + ad_params.Pr[ind] * rt ;
-        }
-
         Eigen::VectorXd ADControl::joint_space_control(const size_t& ind,const Eigen::VectorXd& target_pos){
             
             size_t ad_hsize = target_pos.size();
@@ -196,12 +113,13 @@ namespace control{
             if(psi_d.segment(ad_hsize,ad_hsize).norm() > 1.)
                 psi_d.segment(ad_hsize,ad_hsize) = 1. * psi_d.segment(ad_hsize,ad_hsize).normalized();
 
-            return update_adaptive(ind,  psi,  psi_d);
+            _AD[ind]->update(psi,psi_d);
+            return _AD[ind]->get_output();
         }
 
         Eigen::VectorXd ADControl::task_space_control(const size_t& ind,const Eigen::VectorXd& target_pos){
-            
-            size_t ad_ssize = ad_params.Px[ind].cols();
+
+            size_t ad_ssize = 8;
             size_t ad_hsize = ad_ssize/2;
 
             Eigen::VectorXd joint_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.pos;
@@ -222,7 +140,8 @@ namespace control{
             if(psi_d.segment(ad_hsize,ad_hsize).norm() > 1.)
                 psi_d.segment(ad_hsize,ad_hsize) = 1. * psi_d.segment(ad_hsize,ad_hsize).normalized();
 
-            return update_adaptive(ind,  psi,  psi_d);
+            _AD[ind]->update(psi,psi_d);
+            return _AD[ind]->get_output();
         }
 
         //**********************************************************
@@ -237,7 +156,17 @@ namespace control{
             size_t ad_hsize = ad_ssize/2;
 
             if(_step == 0){
-                init_adaptive(ad_ssize);
+                Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,0.001);
+                adGains(1) *= 2.;
+                adGains(2) *= 2.;
+                adGains(3) *= 1.;
+                Eigen::Vector4d imp = Eigen::Vector4d(0.01, 0.1, 0.1, 0.01);
+                for (size_t i = 0; i < _AD.size(); i++){
+                    _AD[i]->setAdaptiveGains(adGains);
+                    _AD[i]->setImpedance(imp);
+                    _AD[i]->activateImpedance();
+                    }
+
             }
 
             //********set desired task

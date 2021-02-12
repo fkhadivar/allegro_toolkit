@@ -58,7 +58,7 @@ class HandRosMaster
 
     bool init(){
         
-        _allgeroHand =  std::make_shared<robot::Hand>("/home/farshad/catkin_allegro/src/Hand_Master/Hand_Master/models/urdf/allegro_left.urdf");
+        _allgeroHand =  std::make_shared<robot::Hand>(ros::package::getPath(std::string("allegro_toolkit")) + "/models/urdf/allegro_left.urdf");
         //todo reading params from yaml
 
         // _controller = std::make_unique<control::qp_control::QPControl>(_allgeroHand,_controlParams,_dt);

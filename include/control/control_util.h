@@ -43,7 +43,60 @@ namespace control{
             void setup_qp_bounds(Eigen::VectorXd& lb, Eigen::VectorXd& ub);
             bool qp_solve();
             Eigen::VectorXd qp_solution() const;
-        }; 
+        };
+
+        class PassiveDS
+        {
+        private:
+            double eigVal0;
+            double eigVal1;
+            Eigen::Matrix3d damping_eigval = Eigen::Matrix3d::Identity();
+            Eigen::Matrix3d baseMat = Eigen::Matrix3d::Identity();
+        
+            Eigen::Matrix3d Dmat = Eigen::Matrix3d::Identity();
+            Eigen::Vector3d control_output = Eigen::Vector3d::Zero();
+            void updateDampingMatrix(const Eigen::Vector3d& ref_vel);
+        public:
+            PassiveDS(const double& lam0, const double& lam1);
+            ~PassiveDS();
+            void set_damping_eigval(const double& lam0, const double& lam1);
+            void update(const Eigen::Vector3d& vel, const Eigen::Vector3d& des_vel);
+            Eigen::Vector3d get_output();
+        };
+
+        class Adaptive
+        {
+        private:
+            Eigen::MatrixXd A_r;
+            Eigen::MatrixXd B_r;
+            Eigen::MatrixXd P_l;
+            Eigen::MatrixXd Gamma;
+            Eigen::VectorXd Imp;
+            Eigen::MatrixXd Px;
+            Eigen::MatrixXd Pr;
+            bool is_impedance_active = false;
+
+            double error_tol = 4e-1;
+            double max_value = 2e2;
+
+
+            Eigen::VectorXd output;
+        public:
+            Adaptive(const size_t& state_size);
+            ~Adaptive();
+            void activateImpedance(){is_impedance_active = true;};
+            void deactivateImpedance(){is_impedance_active = false;};
+            void setReferenceDyn(const Eigen::MatrixXd& Ar, const Eigen::MatrixXd& Br){A_r = Ar; B_r = Br;}
+            void setAdaptiveGains(const Eigen::VectorXd& adGains){Gamma = adGains.asDiagonal();}
+            void setImpedance(const Eigen::VectorXd& imp){ Imp = imp;}
+            void resetAdaptation(){Px.setZero(); Pr.setZero();}
+
+            void update(const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state);
+            Eigen::VectorXd get_output(){return output;}
+        };
+        
+        
+         
 
         Eigen::VectorXd computeDs(const Eigen::VectorXd& pos, const Eigen::VectorXd& desPos,
                                         const double& dsGain = 1., const double& maxDx = .05);

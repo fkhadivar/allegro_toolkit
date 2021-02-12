@@ -76,7 +76,141 @@ namespace control{
                 return _solver->get_solution();
             return Eigen::VectorXd();
         }
+        //**=====================================================================
+        //**=====================================================================
+        PassiveDS::PassiveDS(const double& lam0, const double& lam1):eigVal0(lam0),eigVal1(lam1){
+            set_damping_eigval(lam0,lam1);
+        }
 
+        PassiveDS::~PassiveDS(){}
+        void PassiveDS::set_damping_eigval(const double& lam0, const double& lam1){
+            if((lam0 > 0)&&(lam1 > 0)){
+                eigVal0 = lam0;
+                eigVal1 = lam1;
+                damping_eigval(0,0) = eigVal0;
+                damping_eigval(1,1) = eigVal1;
+                damping_eigval(2,2) = eigVal1;
+            }else{
+                std::cerr << "wrong values for the eigenvalues"<<"\n";
+            }
+        }
+        void PassiveDS::updateDampingMatrix(const Eigen::Vector3d& ref_vel){ 
+
+            if(ref_vel.norm() > 1e-6){
+                baseMat.setRandom();
+                baseMat.col(0) = ref_vel.normalized();
+                for(uint i=1;i<3;i++){
+                    for(uint j=0;j<i;j++)
+                        baseMat.col(i) -= baseMat.col(j).dot(baseMat.col(i))*baseMat.col(j);
+                    baseMat.col(i).normalize();
+                }
+                Dmat = baseMat*damping_eigval*baseMat.transpose();
+            }else{
+                Dmat = Eigen::Matrix3d::Identity();
+            }
+            // otherwise just use the last computed basis
+        }
+
+        void PassiveDS::update(const Eigen::Vector3d& vel, const Eigen::Vector3d& des_vel){
+            // compute damping
+            updateDampingMatrix(des_vel);
+            // dissipate
+            control_output = - Dmat * vel;
+            // compute control
+            control_output += eigVal0*des_vel;
+        }
+        Eigen::Vector3d PassiveDS::get_output(){ return control_output;}
+        
+        //**=====================================================================
+        //**=====================================================================
+        Adaptive::Adaptive(const size_t& state_size){
+
+            size_t ad_hsize = state_size/2;
+
+            output = Eigen::VectorXd::Zero(ad_hsize);
+
+            Px = Eigen::MatrixXd::Zero(ad_hsize,state_size);
+            Pr = Eigen::MatrixXd::Zero(ad_hsize,ad_hsize);
+            A_r = Eigen::MatrixXd::Zero(state_size,state_size);
+
+            A_r.block(0,ad_hsize,ad_hsize,ad_hsize) = Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+            A_r.block(ad_hsize,0,ad_hsize,ad_hsize) = -2.*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+            A_r.block(ad_hsize,ad_hsize,ad_hsize,ad_hsize) = -1.*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+            
+            B_r = Eigen::MatrixXd::Zero(state_size,ad_hsize);
+            B_r.block(0,0,ad_hsize,ad_hsize) = Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+
+            P_l = Eigen::MatrixXd::Identity(state_size,state_size);
+            P_l.block(0,0,ad_hsize,ad_hsize) = 2*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+            P_l.block(ad_hsize,ad_hsize,ad_hsize,ad_hsize) = 2*Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+                        
+            Gamma = 1.e-3 * Eigen::MatrixXd::Identity(ad_hsize,ad_hsize);
+            Imp = Eigen::VectorXd::Constant(ad_hsize,0.1);
+        }
+        
+        Adaptive::~Adaptive(){}
+        void Adaptive::update(const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state){
+            Eigen::VectorXd rt= -B_r.transpose() * A_r * d_state;
+            Eigen::VectorXd er = c_state - d_state;
+            if (er.norm() > error_tol){
+                er = error_tol*er.normalized();
+            }else if (er.norm() < 0.1*error_tol){
+                er = 0.*er;
+            }
+
+            size_t ad_hsize = c_state.size()/2;
+
+            Eigen::MatrixXd ThetaX = Eigen::MatrixXd::Zero(ad_hsize,ad_hsize);
+            Eigen::MatrixXd ThetaR = Eigen::MatrixXd::Zero(ad_hsize,ad_hsize);
+           
+            for (size_t j = 0; j < ad_hsize; j++){   
+                double ker_sig = 0.02;
+                double alp_e = std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
+                
+                double alp_eX = alp_e;
+                double alp_eR = alp_e;
+                double normX = Px.row(j).norm();
+                double normR = Pr.row(j).norm(); 
+                if (normX < 1e-4){
+                    normX = 1.;
+                    alp_eX = 0;
+                }
+                if(normR < 1e-4){
+                    normR = 1.;
+                    alp_eR = 0;
+                }
+                ThetaX(j,j) = alp_eX * (1. - Imp(j)/normX);
+                ThetaR(j,j) = alp_eR * (1. - Imp(j)/normR);
+            }
+
+            double imp_act = 0;
+            if(is_impedance_active)
+                imp_act = 1.;
+            auto Px_ = Px;
+            auto Pr_ = Pr;
+            Px -= Gamma * B_r.transpose()* P_l * er *  c_state.transpose() + imp_act * ThetaX * Px_;                     
+            Pr -= Gamma * B_r.transpose()* P_l * er *  rt.transpose()  + imp_act * ThetaR * Pr_;
+
+            for (size_t j = 0; j < Px.rows(); j++){
+                for (size_t k = 0; k < Px.cols(); k++){
+                    if(Px(j,k) > max_value){ Px(j,k) = max_value;} 
+                    else if(Px(j,k) < -max_value){Px(j,k) = -max_value;}
+                }
+            }
+            for (size_t j = 0; j < Pr.rows(); j++){
+                for (size_t k = 0; k < Pr.cols(); k++){
+                    if(Pr(j,k) > max_value){ Pr(j,k) = max_value;} 
+                    else if(Pr(j,k) < -max_value){Pr(j,k) = -max_value;}
+                }
+            }
+
+            output =  Px * c_state + Pr * rt ;
+        }
+    
+        
+
+        //**=====================================================================
+        //**=====================================================================
         Eigen::VectorXd computeDs(const Eigen::VectorXd& pos, const Eigen::VectorXd& desPos,
                                         const double& dsGain, const double& maxDx){
                 Eigen::VectorXd deltaX = desPos - pos;

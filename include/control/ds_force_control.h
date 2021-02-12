@@ -17,7 +17,6 @@
 //|    GNU General Public License for more details.
 //|
 
-#include <passive_ds_controller.h>
 #include "Utils.h" //? do we need this
 #include "control/abs_control.hpp"
 #include "robot/hand_robot.hpp"
@@ -60,7 +59,7 @@ namespace control{
             Eigen::VectorXd nullPosition;
             Eigen::VectorXd cmdTorque;
             Eigen::VectorXd plotVariable;
-            std::shared_ptr<DSController> dsController;
+            std::shared_ptr<control::util::PassiveDS> dsController;
 
         };
 

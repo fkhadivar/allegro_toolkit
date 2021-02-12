@@ -27,10 +27,9 @@ namespace control{
         handFtController::handFtController(const std::shared_ptr<robot::AbsRobot>& _robot, Params& _params, size_t _nbFingers, double _dt):params(_params), dt(_dt), nbFingers(_nbFingers){
             addRobot(_robot);
             nullPosition =  Eigen::VectorXd::Zero(robots[0]->getDof());
-            _solver = std::make_shared<control::qp_solver::QPOases>();
-            // dsController = std::make_shared<DSController>(3, 5., 5.);
-            dsController = std::make_shared<DSController>(3, params.psvLambda, params.psvDissip* params.psvLambda);
-            dsController_orient = std::make_shared<DSController>(3, params.psvLambda, params.psvDissip* params.psvLambda);
+            _QP = std::make_shared<control::util::QP>();
+            dsController = std::make_shared<control::util::PassiveDS>(params.psvLambda, params.psvDissip* params.psvLambda);
+            dsController_orient = std::make_shared<control::util::PassiveDS>(params.psvLambda, params.psvDissip* params.psvLambda);
             cmdTorque = Eigen::VectorXd::Zero(16);
 
             targetPositions = std::vector<Eigen::Vector3d>(nbFingers);
@@ -103,55 +102,6 @@ namespace control{
         }
 
         //***********************************************
-        bool handFtController::solve(){
-            if (_solver != nullptr)
-                    return _solver->solve(_H, _g, _A, _lb, _ub, _lbA, _ubA);
-                // else
-                // ERROR
-            return false;
-        }
-
-        Eigen::VectorXd handFtController::solution() const {
-            if (_solver)
-                return _solver->get_solution();
-            return Eigen::VectorXd();
-        }
-        void handFtController::setup_constraints(std::vector<Eigen::MatrixXd>& A_c, std::vector<Eigen::MatrixXd>& b_c){
-            size_t _dim = A_c[0].cols(); 
-            size_t num_of_constraints =0;
-            for (size_t i = 0; i < A_c.size(); i++)
-                num_of_constraints += A_c[i].rows();
-            _A = Eigen::MatrixXd::Zero(num_of_constraints, _dim);
-            _ubA = Eigen::VectorXd::Zero(num_of_constraints);
-            _lbA = Eigen::VectorXd::Zero(num_of_constraints);
-            size_t c_index = 0;
-            for (int i = 0; i < A_c.size(); i++){
-                _A.block(c_index, 0,  A_c[i].rows(),   A_c[i].cols()) = A_c[i];
-                _lbA.segment(c_index, b_c[i].cols()) = b_c[i].row(0);
-                _ubA.segment(c_index, b_c[i].cols()) = b_c[i].row(1);
-                c_index +=A_c[i].rows();
-            }
-        }
-
-        void handFtController::setup_tasks(std::vector<Eigen::MatrixXd>& A_t, std::vector<Eigen::VectorXd>& b_t, std::vector<Eigen::VectorXd>& w_t){
-            size_t _dim = A_t[0].cols(); 
-            size_t num_of_tasks =0;
-            for (size_t i = 0; i < A_t.size(); i++)
-                num_of_tasks += A_t[i].rows();
-            Eigen::MatrixXd A = Eigen::MatrixXd::Zero(num_of_tasks , _dim);
-            Eigen::VectorXd b = Eigen::VectorXd::Zero(num_of_tasks);
-            size_t t_index = 0;
-            for (int i = 0; i < A_t.size(); i++){
-                for (int j = 0; j < A_t[i].rows(); j++)
-                    A_t[i].row(j).array() *= w_t[i](j);
-                b_t[i].array() *= w_t[i].array();
-                A.block(t_index, 0, A_t[i].rows(), A_t[i].cols()) = A_t[i];
-                b.segment(t_index, b_t[i].size()) = b_t[i].transpose();
-                t_index +=A_t[i].rows();
-            }
-            _H = A.transpose() * A;
-            _g = -A.transpose() * b;
-        }
 
         void handFtController::setup_matrices_ds(const Eigen::VectorXd& _fx, const Eigen::VectorXd& _tau_t, const Eigen::VectorXd& _tau_g,
          const Eigen::VectorXd& weight_0, const Eigen::VectorXd& weight_1){
@@ -184,9 +134,7 @@ namespace control{
             }
             
             A_t[0].block(0, 0 ,Jacobs.rows(), Jacobs.cols()) = Jacobs;
-            
             b_t[0] = _fx;
-            
 
             // stability holder task
             A_t.push_back(Eigen::MatrixXd::Zero(dofs, _dim));
@@ -209,19 +157,19 @@ namespace control{
             b_c[0].row(0) = ( _tau_t + (1/_dt)*M* robots[0]->getStates().vel).transpose();
             b_c[0].row(1) = ( _tau_t + (1/_dt)*M* robots[0]->getStates().vel).transpose();
 
-            setup_tasks(A_t,b_t,w_t);
-            
-            setup_constraints(A_c,b_c);
-            
-            // Variable bounds
-            _lb = Eigen::VectorXd::Zero(_dim);
-            _ub = Eigen::VectorXd::Zero(_dim);
-            _lb.head(dofs) = -std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits();
-            _ub.head(dofs) =  std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits();
-            _lb.segment(dofs, dofs) =-_tau_t -_tau_g - std::static_pointer_cast<robot::Hand>(robots[0])->getTrqLimits();
-            _ub.segment(dofs, dofs) =-_tau_t -_tau_g + std::static_pointer_cast<robot::Hand>(robots[0])->getTrqLimits();
 
-            
+            // Variable bounds
+            Eigen::VectorXd lb = Eigen::VectorXd::Zero(_dim);
+            Eigen::VectorXd ub = Eigen::VectorXd::Zero(_dim);
+            lb.head(dofs) = -std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits();
+            ub.head(dofs) =  std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits();
+            lb.segment(dofs, dofs) =-_tau_t -_tau_g - std::static_pointer_cast<robot::Hand>(robots[0])->getTrqLimits();
+            ub.segment(dofs, dofs) =-_tau_t -_tau_g + std::static_pointer_cast<robot::Hand>(robots[0])->getTrqLimits();
+
+            _QP->setup_qp_tasks(A_t,b_t,w_t);
+            _QP->setup_qp_constraints(A_c,b_c);
+            _QP->setup_qp_bounds(lb,ub);
+
         }
         //**=================================================
         //**=================================================
@@ -244,7 +192,7 @@ namespace control{
             for (size_t i = 0; i < numfingers ; i++){
                 
                 Eigen::Vector3d fing_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].task_states.pos;
-                Eigen::Vector4d fing_orient = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerOrientation(i);
+                Eigen::Vector4d fing_orient = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerQuat(i);
                 Eigen::MatrixXd fJacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerFullJacobian(i);
                 Eigen::MatrixXd fing_jacob = std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].jacobian;
                 //** get the Ds
@@ -257,13 +205,13 @@ namespace control{
                 Eigen::VectorXd desiredVel = computeDsManual(finger_pose, Poses[i]);
 
                 // compute the desired linear force coming out of passive ds
-                dsController->Update(fing_vel, desiredVel.tail(3));
+                dsController->update(fing_vel, desiredVel.tail(3));
                 
-                Eigen::VectorXd linear_force = dsController->control_output();
+                Eigen::VectorXd linear_force = dsController->get_output();
 
                 // compute the desired coriolis velocity coming out of passive ds
-                dsController_orient->Update(fing_AngVel, desiredVel.head(3));
-                Eigen::Vector3d cor_force = dsController_orient->control_output();
+                dsController_orient->update(fing_AngVel, desiredVel.head(3));
+                Eigen::Vector3d cor_force = dsController_orient->get_output();
 
                 Eigen::VectorXd des_force = Eigen::VectorXd::Zero(desiredVel.size());
                 des_force << 0.1*cor_force, linear_force + fing_RotMat.transpose()*desiredTorque[i];
@@ -271,7 +219,7 @@ namespace control{
                 // tasktorques[i] = fing_jacob.transpose() * des_force.tail(3);
                 tasktorques[i] = fJacob.transpose() * des_force;
                 
-                // tasktorques[i] = fing_jacob.transpose() * (dsController->control_output() + fing_RotMat.transpose()*desiredTorque[i]);
+                // tasktorques[i] = fing_jacob.transpose() * (dsController->get_output() + fing_RotMat.transpose()*desiredTorque[i]);
                 // fx.segment(3*i,3) = desiredVel.tail(3);
                 fx.segment(6*i, 6) = desiredVel;
                 //**null control
@@ -300,8 +248,9 @@ namespace control{
             Eigen::VectorXd sol;
             // sol.resize(2*dofs+12);
             sol.resize(2*dofs);
-            if (solve())
-                sol = solution();
+            if (_QP->qp_solve())
+                sol = _QP->qp_solution();
+
             _trq +=  grvComp + sol.segment(dofs,dofs);
             if (_step < 100)
                 _trq = Eigen::VectorXd::Zero(dofs);

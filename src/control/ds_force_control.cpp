@@ -29,7 +29,7 @@ namespace control {
 
         DsForceControl::DsForceControl(const std::shared_ptr<robot::AbsRobot>& _robot, Params& _params):params(_params){
             addRobot(_robot);
-            dsController = std::make_shared<DSController>(3,params.psvLambda, params.psvDissip*params.psvLambda);
+            dsController = std::make_shared<control::util::PassiveDS>(params.psvLambda, params.psvDissip*params.psvLambda);
             nullPosition =  Eigen::VectorXd::Zero(robots[0]->getDof()); // todo move this to the hand
         }
         void DsForceControl::setInput(){
@@ -130,8 +130,8 @@ namespace control {
                 Eigen::Vector3d fing_vel = std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].task_states.vel;
                 Eigen::MatrixXd fing_jacob = std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].jacobian;
                 Eigen::VectorXd desDs = control::util::computeDsRBF(fing_pos, targetPositions[i],params.dsGain,params.dsRbfGain,params.dsMaxVel);
-                dsController->Update(fing_vel, desDs);
-                Eigen::Vector4d taskTorque = fing_jacob.transpose() * dsController->control_output();
+                dsController->update(fing_vel, desDs);
+                Eigen::Vector4d taskTorque = fing_jacob.transpose() * dsController->get_output();
             
                 if (i==0)
                     plotVariable = fing_pos -  targetPositions[i];

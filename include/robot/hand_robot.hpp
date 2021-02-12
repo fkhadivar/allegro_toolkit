@@ -68,12 +68,19 @@ namespace robot{
 
         // --------------- Get Hand Data
         Eigen::Vector3d getFingerPos(size_t i);
-        Eigen::Vector4d getFingerOrientation(size_t i);
+        Eigen::Vector4d getFingerQuat(size_t i);
+        Eigen::Vector4d getFingerJointPos(size_t i);
+
         Eigen::Vector3d getFingerAngVel(size_t i);
         Eigen::Matrix3d getFingerRotMat(size_t i);
-        Eigen::MatrixXd getFingerFullJacobian(size_t i);
         Eigen::Vector3d getFingerVel(size_t i);
+        
         Eigen::MatrixXd getFingerJacob(size_t i);
+        Eigen::MatrixXd getFingerJacobQ(size_t i);
+        Eigen::MatrixXd getFingerFullJacobian(size_t i);
+        Eigen::MatrixXd getJacob();
+        Eigen::MatrixXd getJacobDerivative();
+        
         Eigen::MatrixXd getMassMatrix();
         Eigen::VectorXd getCoriolisAndGravityForces();
         Eigen::VectorXd getGravityComp() override;

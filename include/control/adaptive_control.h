@@ -22,7 +22,6 @@
 
 
 #include <memory>
-#include <passive_ds_controller.h> //? do we need this
 #include "Utils.h" //? do we need this
 #include "control/abs_control.hpp"
 // #include "control/qp_solver.hpp"
@@ -70,16 +69,12 @@ namespace control{
  
             //***********************
             void algorithm() override;
-            void init_adaptive(const size_t& state_size);
-            Eigen::VectorXd update_adaptive(const size_t& ind, const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state);
             Eigen::VectorXd joint_space_control(const size_t& ind, const Eigen::VectorXd& target_pos);
             Eigen::VectorXd task_space_control(const size_t& ind, const Eigen::VectorXd& target_pos);
 
             void setup_matrices_qp (const size_t& ind, const Eigen::VectorXd& _xdot_ref);
             double _step = 0 ;
             Params params;
-            ad_Params ad_params;
-
 
             double dt;
 
@@ -87,6 +82,8 @@ namespace control{
             Eigen::VectorXd plotVariable;
 
             std::shared_ptr<control::util::QP> _QP = nullptr;
+            std::vector<std::shared_ptr<control::util::Adaptive>> _AD;
+
         };
 
     }

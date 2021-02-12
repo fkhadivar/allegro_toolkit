@@ -29,8 +29,6 @@ namespace control{
             nullPosition =  Eigen::VectorXd::Zero(robots[0]->getDof());
 
             _QP = std::make_shared<control::util::QP>();
-            // dsController = std::make_shared<DSController>(3, 5., 5.);
-            // dsController = std::make_shared<DSController>(3, params.psvLambda, params.psvDissip* params.psvLambda);
 
         }
         QPControl::~QPControl(){};

@@ -22,7 +22,6 @@
 
 
 #include <memory>
-#include <passive_ds_controller.h> //? do we need this
 #include "Utils.h" //? do we need this
 #include "control/abs_control.hpp"
 #include "control/qp_solver.hpp"
@@ -74,12 +73,9 @@ namespace control{
                     output torque
                 */
                 Eigen::VectorXd computeDsManual(const Eigen::VectorXd& pos, const Eigen::VectorXd& desPos);
-                void setup_tasks(std::vector<Eigen::MatrixXd>& A_t, std::vector<Eigen::VectorXd>& b_t,std::vector<Eigen::VectorXd>& w_t);
-                void setup_constraints(std::vector<Eigen::MatrixXd>& A_c, std::vector<Eigen::MatrixXd>& b_c);
                 void setup_matrices_invDyn(const Eigen::VectorXd& desired_acc, const Eigen::VectorXd& weights);
                 void setup_matrices_ds(const Eigen::VectorXd& _fx, const Eigen::VectorXd& _tau_t, const Eigen::VectorXd& _tau_g, const Eigen::VectorXd& weight_0, const Eigen::VectorXd& weight_1);
-                bool solve();
-                Eigen::VectorXd solution() const;
+
                 //***********************
                 Eigen::VectorXd computeTorque(const std::vector<Eigen::VectorXd>& Poses);
                 void algorithm() override;
@@ -96,13 +92,10 @@ namespace control{
                 std::vector<Eigen::Vector4d> targetOrientations;
                 std::vector<Eigen::Vector3d> desiredTorque;
 
-                std::shared_ptr<qp_solver::QPOases> _solver = nullptr;
-                                    // QP matrices
-                Eigen::MatrixXd _H, _A;
-                Eigen::VectorXd _g, _ub, _lb, _ubA, _lbA;
+                std::shared_ptr<control::util::QP> _QP = nullptr;
 
-                std::shared_ptr<DSController> dsController;
-                std::shared_ptr<DSController> dsController_orient;
+                std::shared_ptr<control::util::PassiveDS> dsController;
+                std::shared_ptr<control::util::PassiveDS> dsController_orient;
         };
 
     }

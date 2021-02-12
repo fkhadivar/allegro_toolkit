@@ -22,10 +22,7 @@
 
 
 #include <memory>
-#include <passive_ds_controller.h> //? do we need this
-#include "Utils.h" //? do we need this
 #include "control/abs_control.hpp"
-// #include "control/qp_solver.hpp"
 #include "robot/hand_robot.hpp"
 
 namespace control{
@@ -84,7 +81,6 @@ namespace control{
 
 
             std::shared_ptr<control::util::QP> _QP = nullptr;
-            // std::shared_ptr<DSController> dsController;
         };
 
     }

@@ -116,7 +116,7 @@ class HandRosMaster
 
             for (size_t fngr=0; fngr<_allgeroHand->getNBfingers(); fngr++){
                 _targetPosition[fngr] = _allgeroHand->getFingerPos(fngr);
-                _targetOrientation[fngr] = _allgeroHand->getFingerOrientation(fngr);
+                _targetOrientation[fngr] = _allgeroHand->getFingerQuat(fngr);
             }
 
             ROS_INFO("[Hand_FT_Controller] FT position controller successfully initialized!");
@@ -338,7 +338,7 @@ class HandRosMaster
 
             // get position orientation for each of the finger from fk
             Eigen::Vector3d ft_postion = _allgeroHand->getFingerPos(fngr);
-            Eigen::Vector4d ft_orientation = _allgeroHand->getFingerOrientation(fngr);
+            Eigen::Vector4d ft_orientation = _allgeroHand->getFingerQuat(fngr);
 
             // assign the position and orientation values to the message
             _ftPose_msg.poses[fngr].position.x = ft_postion(0);
