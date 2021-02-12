@@ -87,6 +87,9 @@ namespace control{
             void activateImpedance(){is_impedance_active = true;};
             void deactivateImpedance(){is_impedance_active = false;};
             void setReferenceDyn(const Eigen::MatrixXd& Ar, const Eigen::MatrixXd& Br){A_r = Ar; B_r = Br;}
+            void setReferenceA(const Eigen::MatrixXd& Ar){A_r = Ar;}
+            void setReferenceB(const Eigen::MatrixXd& Br){B_r = Br;}
+
             void setAdaptiveGains(const Eigen::VectorXd& adGains){Gamma = adGains.asDiagonal();}
             void setImpedance(const Eigen::VectorXd& imp){ Imp = imp;}
             void resetAdaptation(){Px.setZero(); Pr.setZero();}

@@ -52,6 +52,7 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "drawable": "cpp",
-        "image": "cpp"
+        "image": "cpp",
+        "core": "cpp"
     }
 }

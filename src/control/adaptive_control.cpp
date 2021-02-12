@@ -51,7 +51,7 @@ namespace control{
             
             size_t dofs = robots[0]->getDof()/4;
             size_t ts_size = _xdot_ref.size();
-
+            double dt = 0.005;
             //** Setup Task
             std::vector<Eigen::MatrixXd> A_t;
             std::vector<Eigen::VectorXd> b_t;
@@ -59,32 +59,42 @@ namespace control{
             std::vector<Eigen::MatrixXd> A_c;
             std::vector<Eigen::MatrixXd> b_c;
 
-            Eigen::MatrixXd Jacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind);
             // std::cout << "jacobian:" << std::endl << Jacob << std::endl;
             //******************************************************
+            Eigen::VectorXd joint_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.pos;
+            Eigen::VectorXd joint_vel = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.vel;
+            Eigen::MatrixXd Jacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind);
+            w_t.push_back(Eigen::VectorXd::Constant(ts_size,1));
+            A_t.push_back(Eigen::MatrixXd::Zero(ts_size, dofs));
+            b_t.push_back(Eigen::VectorXd::Zero(ts_size));
+            A_t[0] = Jacob;
+            b_t[0] = Jacob * joint_pos + dt * _xdot_ref;
+
+
             //** tracking task
-            w_t.push_back(Eigen::VectorXd::Constant(dofs,1));
+            w_t.push_back(Eigen::VectorXd::Constant(dofs,0.001));
             A_t.push_back(Eigen::MatrixXd::Identity(dofs, dofs));
             b_t.push_back(Eigen::VectorXd::Zero(dofs));
+            A_t[1] = Eigen::MatrixXd::Identity(4,4);
+            b_t[1] = Eigen::Vector4d::Constant(4,0);
 
-            // w_t.push_back(Eigen::VectorXd::Constant(ts_size,10));
-            // A_t.push_back(Eigen::MatrixXd::Zero(ts_size, dofs));
-            // b_t.push_back(Eigen::VectorXd::Zero(ts_size));
-            // A_t[1] = Jacob;
-            // b_t[1] = _xdot_ref;
             //**Equality Const 
             A_c.push_back(Eigen::MatrixXd::Zero(ts_size, dofs));
             b_c.push_back(Eigen::MatrixXd::Zero(2, ts_size));
 
-            A_c[0] = Jacob;
-            b_c[0].row(0) = _xdot_ref;
-            b_c[0].row(1) = _xdot_ref;
+            // A_c[0] = Jacob;
+            // b_c[0].row(0) = _xdot_ref;
+            // b_c[0].row(1) = _xdot_ref;
+
 
             //** Variable bounds
             Eigen::VectorXd lb = Eigen::VectorXd::Zero(dofs);
             Eigen::VectorXd ub = Eigen::VectorXd::Zero(dofs);
-            lb = -std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits().segment(4*ind,4);
-            ub =  std::static_pointer_cast<robot::Hand>(robots[0])->getVelLimits().segment(4*ind,4);
+            Eigen::VectorXd ll;
+            Eigen::VectorXd uu;
+            std::tie(ll,uu) = std::static_pointer_cast<robot::Hand>(robots[0])->getPosLimits();
+            lb = ll.segment(4*ind,4);
+            ub = uu.segment(4*ind,4);
 
             _QP->setup_qp_tasks(A_t,b_t,w_t);
             _QP->setup_qp_constraints(A_c,b_c);
@@ -133,8 +143,20 @@ namespace control{
             Eigen::Vector3d fing_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].task_states.pos;
 
             Eigen::Vector3d pos_d = target_pos;
+
+            Eigen::VectorXd desDs = control::util::computeDsRBF(fing_pos, target_pos,10,100,0.05);
+            // Eigen::Vector4d desJpos = 1.*std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind).transpose()*desDs;
+            setup_matrices_qp(ind,desDs);
+            Eigen::VectorXd sol;
+            sol.resize(4);
+            if (_QP->qp_solve())
+                sol = _QP->qp_solution();
+
             Eigen::VectorXd psi_d = Eigen::VectorXd::Zero(ad_ssize);
-            psi_d.segment(0,ad_hsize) = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerInvKinematic(ind,pos_d);
+            // psi_d.segment(0,ad_hsize) = desJpos + joint_pos;
+            psi_d.segment(0,ad_hsize) = sol ;
+
+            // psi_d.segment(0,ad_hsize) = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerInvKinematic(ind,pos_d);
             psi_d.segment(ad_hsize,ad_hsize) = -5. *(psi.segment(0,ad_hsize) - psi_d.segment(0,ad_hsize)) ;
             // 
             if(psi_d.segment(ad_hsize,ad_hsize).norm() > 1.)
@@ -156,11 +178,12 @@ namespace control{
             size_t ad_hsize = ad_ssize/2;
 
             if(_step == 0){
-                Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,0.001);
+                Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,1e-3);
                 adGains(1) *= 2.;
                 adGains(2) *= 2.;
                 adGains(3) *= 1.;
                 Eigen::Vector4d imp = Eigen::Vector4d(0.01, 0.1, 0.1, 0.01);
+
                 for (size_t i = 0; i < _AD.size(); i++){
                     _AD[i]->setAdaptiveGains(adGains);
                     _AD[i]->setImpedance(imp);
@@ -176,6 +199,12 @@ namespace control{
             // targetPositions[1] =  Eigen::Vector3d(.05,  0.,.1);
             // targetPositions[2] =  Eigen::Vector3d(.05, .05,.1);
             // targetPositions[3] =  Eigen::Vector3d(.05,-.05,.05);
+
+            //! to test the position traking:
+            targetPositions[0] =  Eigen::Vector3d(.1,-.05,.1);
+            targetPositions[1] =  Eigen::Vector3d(.1, .015,.1);
+            targetPositions[2] =  Eigen::Vector3d(.1, .065,.1);
+            targetPositions[3] =  Eigen::Vector3d(.08, -.05,.02);
 
             // int c_flag = (int)((_step-100) /300);
             // std::cout <<  c_flag % 5 << std::endl;
@@ -215,17 +244,14 @@ namespace control{
             //     targetPositions[3] =  Eigen::Vector3d(.095, -.087,.016);
 
             // }
+
             std::vector<Eigen::Vector4d> targetJointPositions(4);
             targetJointPositions[0] =  Eigen::Vector4d(0., 0.3, 0.7, 0.7);
             targetJointPositions[1] =  Eigen::Vector4d(0., 0.3, 0.7, 0.7);
             targetJointPositions[2] =  Eigen::Vector4d(0., 0.3, 0.7, 0.7);
             targetJointPositions[3] =  Eigen::Vector4d(1.2,1.2, 0.7, 0.7);
 
-            //! to test the position traking:
-            targetPositions[0] =  Eigen::Vector3d(.1,-.05,.1);
-            targetPositions[1] =  Eigen::Vector3d(.1, .015,.1);
-            targetPositions[2] =  Eigen::Vector3d(.1, .065,.1);
-            targetPositions[3] =  Eigen::Vector3d(.12, -.05,.02);
+
             
             //*******get force from passie Ds
             for (size_t i = 0; i < numfingers ; i++){
