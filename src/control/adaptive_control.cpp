@@ -1,6 +1,6 @@
 //|
 //|    Copyright (C) 2020 Learning Algorithms and Systems Laboratory, EPFL, Switzerland
-//|    Authors:  Farshad Khadivr (maintainer)
+//|    Authors:  Farshad Khadivar (maintainer)
 //|    email:   farshad.khadivar@epfl.ch
 //|    website: lasa.epfl.ch
 //|
@@ -42,6 +42,27 @@ namespace control{
             return cmdTorque;
         }
 
+        std::vector<std::string> ADControl::get_data_header(){
+            std::vector<std::string> _header;
+            _header.push_back("finger_0_x");_header.push_back("finger_0_y");_header.push_back("finger_0_z");
+            _header.push_back("finger_1_x");_header.push_back("finger_1_y");_header.push_back("finger_1_z");
+            _header.push_back("finger_2_x");_header.push_back("finger_2_y");_header.push_back("finger_2_z");
+            _header.push_back("finger_3_x");_header.push_back("finger_3_y");_header.push_back("finger_3_z");
+
+            _header.push_back("imp00");_header.push_back("imp01");_header.push_back("imp02");_header.push_back("imp03");
+            _header.push_back("imp10");_header.push_back("imp11");_header.push_back("imp12");_header.push_back("imp13");
+            _header.push_back("imp20");_header.push_back("imp21");_header.push_back("imp22");_header.push_back("imp23");
+            _header.push_back("imp30");_header.push_back("imp31");_header.push_back("imp32");_header.push_back("imp33");
+
+            _header.push_back("trq00");_header.push_back("trq01");_header.push_back("trq02");_header.push_back("trq03");
+            _header.push_back("trq10");_header.push_back("trq11");_header.push_back("trq12");_header.push_back("trq13");
+            _header.push_back("trq20");_header.push_back("trq21");_header.push_back("trq22");_header.push_back("trq23");
+            _header.push_back("trq30");_header.push_back("trq31");_header.push_back("trq32");_header.push_back("trq33");
+
+            return _header;
+        }
+
+
         Eigen::VectorXd ADControl::getPlotVariable(){
             return plotVariable;
         }
@@ -52,18 +73,17 @@ namespace control{
             size_t dofs = robots[0]->getDof()/4;
             size_t ts_size = _xdot_ref.size();
             double dt = 0.005;
+
+            Eigen::VectorXd joint_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.pos;
+            Eigen::VectorXd joint_vel = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.vel;
+            Eigen::MatrixXd Jacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind);
+
             //** Setup Task
             std::vector<Eigen::MatrixXd> A_t;
             std::vector<Eigen::VectorXd> b_t;
             std::vector<Eigen::VectorXd> w_t;
             std::vector<Eigen::MatrixXd> A_c;
             std::vector<Eigen::MatrixXd> b_c;
-
-            // std::cout << "jacobian:" << std::endl << Jacob << std::endl;
-            //******************************************************
-            Eigen::VectorXd joint_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.pos;
-            Eigen::VectorXd joint_vel = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].joint_states.vel;
-            Eigen::MatrixXd Jacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind);
             w_t.push_back(Eigen::VectorXd::Constant(ts_size,1));
             A_t.push_back(Eigen::MatrixXd::Zero(ts_size, dofs));
             b_t.push_back(Eigen::VectorXd::Zero(ts_size));
@@ -72,7 +92,7 @@ namespace control{
 
 
             //** tracking task
-            w_t.push_back(Eigen::VectorXd::Constant(dofs,0.001));
+            w_t.push_back(Eigen::VectorXd::Constant(dofs,0.002));
             A_t.push_back(Eigen::MatrixXd::Identity(dofs, dofs));
             b_t.push_back(Eigen::VectorXd::Zero(dofs));
             A_t[1] = Eigen::MatrixXd::Identity(4,4);
@@ -81,11 +101,6 @@ namespace control{
             //**Equality Const 
             A_c.push_back(Eigen::MatrixXd::Zero(ts_size, dofs));
             b_c.push_back(Eigen::MatrixXd::Zero(2, ts_size));
-
-            // A_c[0] = Jacob;
-            // b_c[0].row(0) = _xdot_ref;
-            // b_c[0].row(1) = _xdot_ref;
-
 
             //** Variable bounds
             Eigen::VectorXd lb = Eigen::VectorXd::Zero(dofs);
@@ -138,27 +153,21 @@ namespace control{
 
             Eigen::VectorXd psi = Eigen::VectorXd::Zero(ad_ssize);
             psi.segment(0,ad_hsize) = joint_pos;
-            // psi.segment(ad_hsize,ad_hsize) = joint_vel.segment(ii,1);
+            // psi.segment(ad_hsize,ad_hsize) = joint_vel;
 
             Eigen::Vector3d fing_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[ind].task_states.pos;
 
             Eigen::Vector3d pos_d = target_pos;
 
             Eigen::VectorXd desDs = control::util::computeDsRBF(fing_pos, target_pos,10,100,0.05);
-            // Eigen::Vector4d desJpos = 1.*std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(ind).transpose()*desDs;
             setup_matrices_qp(ind,desDs);
             Eigen::VectorXd sol;
             sol.resize(4);
             if (_QP->qp_solve())
                 sol = _QP->qp_solution();
-
             Eigen::VectorXd psi_d = Eigen::VectorXd::Zero(ad_ssize);
-            // psi_d.segment(0,ad_hsize) = desJpos + joint_pos;
             psi_d.segment(0,ad_hsize) = sol ;
-
-            // psi_d.segment(0,ad_hsize) = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerInvKinematic(ind,pos_d);
             psi_d.segment(ad_hsize,ad_hsize) = -5. *(psi.segment(0,ad_hsize) - psi_d.segment(0,ad_hsize)) ;
-            // 
             if(psi_d.segment(ad_hsize,ad_hsize).norm() > 1.)
                 psi_d.segment(ad_hsize,ad_hsize) = 1. * psi_d.segment(ad_hsize,ad_hsize).normalized();
 
@@ -173,16 +182,12 @@ namespace control{
             size_t numfingers = std::static_pointer_cast<robot::Hand>(robots[0])->finger.size();
             cmdTorque = Eigen::VectorXd::Zero(dofs);
 
-            //********compute the gravity compent
-            size_t ad_ssize = 8;
-            size_t ad_hsize = ad_ssize/2;
-
             if(_step == 0){
-                Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,1e-3);
-                adGains(1) *= 2.;
-                adGains(2) *= 2.;
+                Eigen::VectorXd adGains = Eigen::VectorXd::Constant(4,0.4);
+                adGains(1) *= 1.;
+                adGains(2) *= 1.;
                 adGains(3) *= 1.;
-                Eigen::Vector4d imp = Eigen::Vector4d(0.01, 0.1, 0.1, 0.01);
+                Eigen::Vector4d imp = Eigen::Vector4d(0.25, 0.2, 0.15, 0.05);
 
                 for (size_t i = 0; i < _AD.size(); i++){
                     _AD[i]->setAdaptiveGains(adGains);
@@ -195,55 +200,19 @@ namespace control{
             //********set desired task
             //todo move this part in a function
             std::vector<Eigen::Vector3d> targetPositions(4);
-            // targetPositions[0] =  Eigen::Vector3d(.05,-.05,.1);
-            // targetPositions[1] =  Eigen::Vector3d(.05,  0.,.1);
-            // targetPositions[2] =  Eigen::Vector3d(.05, .05,.1);
-            // targetPositions[3] =  Eigen::Vector3d(.05,-.05,.05);
 
             //! to test the position traking:
-            targetPositions[0] =  Eigen::Vector3d(.1,-.05,.1);
-            targetPositions[1] =  Eigen::Vector3d(.1, .015,.1);
-            targetPositions[2] =  Eigen::Vector3d(.1, .065,.1);
-            targetPositions[3] =  Eigen::Vector3d(.08, -.05,.02);
+            targetPositions[0] =  Eigen::Vector3d(.11,-.05,.1);
+            targetPositions[1] =  Eigen::Vector3d(.11, .015,.1);
+            targetPositions[2] =  Eigen::Vector3d(.11, .065,.1);
+            targetPositions[3] =  Eigen::Vector3d(.11, -.04,.05);
 
-            // int c_flag = (int)((_step-100) /300);
-            // std::cout <<  c_flag % 5 << std::endl;
-            // if (_step < 100 ){
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.07,.15);
-            //     targetPositions[1] =  Eigen::Vector3d(.1, -0.015,.15);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .055,.15);
-            //     targetPositions[3] =  Eigen::Vector3d(.05, -.05,.05);
-            // }else if(c_flag % 5 < 1){
-            //     targetPositions[0] =  Eigen::Vector3d(.01,-.05,.17);
-            //     targetPositions[1] =  Eigen::Vector3d(.01,  0.,.17);
-            //     targetPositions[2] =  Eigen::Vector3d(.01, .05,.17);
-            //     targetPositions[3] =  Eigen::Vector3d(.1,  .0,.07);
-                
-            // }else if(c_flag % 5 < 2){
-            //     targetPositions[0] =  Eigen::Vector3d(.07,-.04,.14);
-            //     targetPositions[1] =  Eigen::Vector3d(.07,  0.,.14);
-            //     targetPositions[2] =  Eigen::Vector3d(.07, .04,.14);
-            //     targetPositions[3] =  Eigen::Vector3d(.09, .02,.06);
-
-            // }else if(c_flag % 5 < 3){
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.05,.1);
-            //     targetPositions[1] =  Eigen::Vector3d(.1, .015,.1);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .065,.1);
-            //     targetPositions[3] =  Eigen::Vector3d(.12, -.05,.02);
-
-            // }else if(c_flag % 5 < 4){
-            //     targetPositions[0] =  Eigen::Vector3d(.07,-.05,.17);
-            //     targetPositions[1] =  Eigen::Vector3d(.07,-.01,.17);
-            //     targetPositions[2] =  Eigen::Vector3d(.07, .04,.17);
-            //     targetPositions[3] =  Eigen::Vector3d(.07, .04,.05);
-
-            // }else if(c_flag % 5 < 5){
-            //     targetPositions[0] =  Eigen::Vector3d(.08,-.046,.05);
-            //     targetPositions[1] =  Eigen::Vector3d(.08, .0  ,.05);
-            //     targetPositions[2] =  Eigen::Vector3d(.08, .046,.05);
-            //     targetPositions[3] =  Eigen::Vector3d(.095, -.087,.016);
-
-            // }
+            if (_step > 2000 ){
+                targetPositions[0] =  Eigen::Vector3d(.08,-.07,.15);
+                targetPositions[1] =  Eigen::Vector3d(.08, -0.015,.15);
+                targetPositions[2] =  Eigen::Vector3d(.08, .055,.15);
+                targetPositions[3] =  Eigen::Vector3d(.08, -.05,.07);
+            }
 
             std::vector<Eigen::Vector4d> targetJointPositions(4);
             targetJointPositions[0] =  Eigen::Vector4d(0., 0.3, 0.7, 0.7);
@@ -252,7 +221,9 @@ namespace control{
             targetJointPositions[3] =  Eigen::Vector4d(1.2,1.2, 0.7, 0.7);
 
 
-            
+            Eigen::VectorXd positions = Eigen::VectorXd::Zero(12);
+            Eigen::VectorXd impedances = Eigen::VectorXd::Zero(16);
+
             //*******get force from passie Ds
             for (size_t i = 0; i < numfingers ; i++){
                 Eigen::Vector3d fing_pos = std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].task_states.pos;
@@ -260,7 +231,9 @@ namespace control{
 
                 Eigen::VectorXd erPos = Eigen::VectorXd::Zero(4);
                 erPos.segment(0,3) = fing_pos - targetPositions[i];
-
+                
+                positions.segment(3*i,3) = fing_pos - targetPositions[i];
+                impedances.segment(4*i,4) = _AD[i]->get_impedance();
                 // cmdTorque.segment(4*i,4) = joint_space_control(i,targetJointPositions[i]);
                 cmdTorque.segment(4*i,4) = task_space_control(i,targetPositions[i]);
                 double maxTorque = 0.4;
@@ -275,12 +248,20 @@ namespace control{
                 if (i==0)
                     plotVariable = erPos;
             }
-
  
-            // std::cout << "TRQ: " << cmdTorque.transpose()<< std::endl ;
-            
-            if (_step < 50)
+            if (_step < 25)
                 cmdTorque = Eigen::VectorXd::Zero(dofs);
+            
+            std::vector<double> _data;
+            
+            for (size_t i = 0; i < 12; i++)
+                _data.push_back(positions[i]);
+            for (size_t i = 0; i < 16; i++)
+                _data.push_back(impedances[i]);
+            for (size_t i = 0; i < 12; i++)
+                _data.push_back(cmdTorque[i]);
+            
+            data_log = _data;
             _step ++;
         }
 

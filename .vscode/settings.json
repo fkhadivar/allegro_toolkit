@@ -53,6 +53,13 @@
         "typeinfo": "cpp",
         "drawable": "cpp",
         "image": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "program": "cpp",
+        "shader": "cpp",
+        "bufferobject": "cpp",
+        "mixinvector": "cpp",
+        "texture": "cpp",
+        "buffered_value": "cpp",
+        "fast_back_stack": "cpp"
     }
 }

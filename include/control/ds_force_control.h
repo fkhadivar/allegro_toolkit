@@ -46,6 +46,8 @@ namespace control{
             Eigen::VectorXd getOutput() override;
             Eigen::VectorXd getPlotVariable();
 
+            std::vector<std::string> get_data_header();
+            std::vector<double> get_data_log(){return data_log;}
             void setParams(Params& _params);
             void setDsGain(const double dsGain);
             void setPsvGain(const double psvLambda, const double psvDissip);
@@ -56,6 +58,7 @@ namespace control{
             void updateHandBasePose(const Eigen::Matrix3d& ref2Base); //? do we need this?
             double _step = 0 ;
             Params params;
+            std::vector<double> data_log;
             Eigen::VectorXd nullPosition;
             Eigen::VectorXd cmdTorque;
             Eigen::VectorXd plotVariable;

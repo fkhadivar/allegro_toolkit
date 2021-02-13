@@ -124,11 +124,11 @@ namespace robot{
     }
     Eigen::VectorXd Hand::getVelLimits(){
         //! this has to be cleaned and be received from the libraray
-        return Eigen::VectorXd::Constant(16,7); 
+        return Eigen::VectorXd::Constant(16,1); 
     }
     Eigen::VectorXd Hand::getTrqLimits(){
         //! this has to be cleaned and be received from the libraray
-        return Eigen::VectorXd::Constant(16,10.); 
+        return Eigen::VectorXd::Constant(16,10); 
     }
 
     Eigen::MatrixXd Hand::getMassMatrix() {

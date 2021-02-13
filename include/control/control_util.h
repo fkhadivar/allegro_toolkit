@@ -95,7 +95,9 @@ namespace control{
             void resetAdaptation(){Px.setZero(); Pr.setZero();}
 
             void update(const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state);
+            Eigen::VectorXd get_impedance();
             Eigen::VectorXd get_output(){return output;}
+
         };
         
         

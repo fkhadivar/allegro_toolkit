@@ -35,7 +35,7 @@ struct Options
 {
     std::string control_mode;
     bool is_optitrack_on;
-    double filter_gain = 0.;
+    double filter_gain = 0.2;
 };
 class HandRosMaster 
 {
@@ -43,14 +43,6 @@ class HandRosMaster
     HandRosMaster(ros::NodeHandle &n,double frequency, Options options, control::ds_force::Params controlParams):
     _n(n), _loopRate(frequency), _dt(1.0f/frequency),_options(options),_controlParams(controlParams){
         _stop =false;
-
-        //TODO clean the optitrack code
-        _optitrack_initiated = true;
-        _optitrack_ready = true;
-        if(_options.is_optitrack_on){
-            _optitrack_initiated = false;
-            _optitrack_ready = false;
-        }
 
     }
 
@@ -61,7 +53,6 @@ class HandRosMaster
         // ! initialize control Params
         //todo reading params from yaml
 
-        // _controller = std::make_unique<control::ds_force::DsForceControl>(_allgeroHand,_controlParams);
         _controller = std::make_shared<control::ds_force::DsForceControl>(_allgeroHand,_controlParams);
 
         _states.pos =Eigen::VectorXd::Zero(_allgeroHand->getDof());
@@ -76,12 +67,6 @@ class HandRosMaster
 
         _subJointSates = _n.subscribe("/allegroHand_0/joint_states",1,
         &HandRosMaster::updateHandStates,this,ros::TransportHints().reliable().tcpNoDelay());
-        _subOptitrack[0] = _n.subscribe<geometry_msgs::PoseStamped>("/vrpn_client_node/baseHand/pose", 1,
-            boost::bind(&HandRosMaster::updateOptitrack,this,_1,0),ros::VoidPtr(),ros::TransportHints().reliable().tcpNoDelay());
-        // _subOptitrack[1] = _n.subscribe<geometry_msgs::PoseStamped>("/vrpn_client_node/baseHand2/pose", 1,
-        //    boost::bind(&HandRosMaster::updateOptitrack,this,_1,1),ros::VoidPtr(),ros::TransportHints().reliable().tcpNoDelay());
-        _subOptitrack[1] = _n.subscribe<geometry_msgs::PoseStamped>("/vrpn_client_node/objectHand2/pose", 1,
-            boost::bind(&HandRosMaster::updateOptitrack,this,_1,1),ros::VoidPtr(),ros::TransportHints().reliable().tcpNoDelay());
 
         _pubDesiredJointSates = _n.advertise<sensor_msgs::JointState>("desiredJointState",1);
         _pubJointCmd = _n.advertise<sensor_msgs::JointState>("/allegroHand_0/joint_cmd",  1);
@@ -92,6 +77,15 @@ class HandRosMaster
         //TODO make plotting more clean and like a function that receives input from contrl unit
         _plotter = _n.advertise<std_msgs::Float64MultiArray>("/hand/plotvar",1);
 
+        std::string _fileName = "passiveds_stability_rot_2";
+        _outputFile.open(ros::package::getPath(std::string("allegro_toolkit"))+"/data_recording/"+_fileName+".csv");
+        if(!_outputFile.is_open()){ ROS_ERROR("[Master]: Cannot open output file, the data directory might be missing");
+            return false;
+        }
+        std::vector<std::string> header = _controller->get_data_header();
+        for (size_t i = 0; i < header.size(); i++)
+            _outputFile << header[i] << ", ";
+        _outputFile <<"\n";
 
         
         //todo condition here
@@ -101,33 +95,31 @@ class HandRosMaster
     void run(){
 
         while(!_stop && ros::ok()){ 
-            if (_optitrack_initiated){
-                _mutex.lock();
-                if(_optitrack_ready){
-                    _allgeroHand->updateStates(_states);
+            
+            _mutex.lock();
+            
+            _allgeroHand->updateStates(_states);
 
-                    //todo send feedback to control class
-                    // _controller->setInput();
-                    _cmd_states.trq = _controller->getOutput();
-                    publishHandStates(_cmd_states);
+            //todo send feedback to control class
+            // _controller->setInput();
+            _cmd_states.trq = _controller->getOutput();
+            publishHandStates(_cmd_states);
 
-                    Eigen::VectorXd plotVariable = _controller->getPlotVariable();
-                    for (size_t i = 0; i < 3; i++)
-                        _plotVar.data[i] = plotVariable[i];
-                    _plotter.publish(_plotVar);
-                    //logData
-                
-                }else{ optitrackInitialization(); }
-                _mutex.unlock();
-            }
-        ros::spinOnce();
-        _loopRate.sleep();
+            Eigen::VectorXd plotVariable = _controller->getPlotVariable();
+            for (size_t i = 0; i < 3; i++)
+                _plotVar.data[i] = plotVariable[i];
+            _plotter.publish(_plotVar);
+            logData(_controller->get_data_log());
+            
+            _mutex.unlock();
+            ros::spinOnce();
+            _loopRate.sleep();
         }
     
         publishHandStates(_cmd_states);
         ros::spinOnce();
         _loopRate.sleep();
-        // _outputFile.close();
+        _outputFile.close();
         ros::shutdown();
     }
 
@@ -135,14 +127,13 @@ class HandRosMaster
     robot::States _states, _cmd_states;
     double _dt;
     Options _options; 
+    std::ofstream _outputFile;
 
     ros::NodeHandle _n;
     ros::Rate _loopRate;
 
     ros::Subscriber _subJointSates;                   // Joint States of Allegro Hand
     //ros::Subscriber _subJointCmd;                   // Joint Commands of Allegro Hand
-    ros::Subscriber _subOptitrack[2];  // optitrack markers pose //todo 
-    // ros::Subscriber _subBioTac;
 
     ros::Publisher _pubDesiredJointSates;         //  Joint States of Allegro Hand
     ros::Publisher _pubJointCmd;                  // Joint Commands of Allegro Hand for Position Mode
@@ -151,8 +142,6 @@ class HandRosMaster
     std_msgs::Float64MultiArray _plotVar;
     ros::Publisher _plotter;
 
-    bool _optitrack_initiated;         // Monitor first optitrack markers update
-    bool _optitrack_ready;                                  // Check if all markers position is received
     bool _stop;                                         // Check for CTRL+C
     std::mutex _mutex;
 
@@ -193,15 +182,10 @@ class HandRosMaster
         }
     }
 
-    //TODO clean the optitrack
-    void optitrackInitialization(){
-
-    }
-    void updateOptitrack(const geometry_msgs::PoseStamped::ConstPtr& msg, int k){
-
-    }
-    uint16_t checkTrackedMarker(float a, float b){
-
+    void logData(const std::vector<double>& _data){
+        for (size_t i = 0; i < _data.size(); i++)
+            _outputFile << _data[i] << ", ";
+        _outputFile <<"\n";
     }
 
 };
@@ -209,25 +193,22 @@ class HandRosMaster
 
 int main (int argc, char **argv)
 {
-    float frequency = 100.0f; //200.0f;
+    float frequency = 200.0f; //200.0f;
     Options options;
     options.control_mode = "torque";
     options.is_optitrack_on = false;
     options.filter_gain = .2;
 
     control::ds_force::Params controlParams;
-    controlParams.dsGain = 1.;
+    controlParams.dsGain = 5.;
     controlParams.dsMaxVel = .05;
-    controlParams.dsRbfGain = 15.;
+    controlParams.dsRbfGain = 10.;
     controlParams.psvLambda = 5.;
     controlParams.psvDissip = .75;
     controlParams.nullGain = .1;
     ros::init(argc,argv, "hand_master");
     ros::NodeHandle n;
-    // std::string filename;
-    // ROS_INFO("[debug]: Here 1 ...");
-    // you can use some if statements for having diffrent modes
-    // std::unique_ptr<HandRosMaster> HandMaster = std::make_unique<HandRosMaster>(n,frequency,options,controlParams);
+
     std::shared_ptr<HandRosMaster> HandMaster = std::make_shared<HandRosMaster>(n,frequency,options,controlParams);
 
     if (!HandMaster->init()){

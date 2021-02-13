@@ -60,13 +60,15 @@ namespace control{
                 optitrack
                 biotac
             */
+            std::vector<std::string> get_data_header();
+            std::vector<double> get_data_log(){return data_log;}
             void setInput() override;
             Eigen::VectorXd getOutput() override;
             Eigen::VectorXd getPlotVariable();
 
             void setParams(Params& _params);
         protected:
- 
+            std::vector<double> data_log;
             //***********************
             void algorithm() override;
             Eigen::VectorXd joint_space_control(const size_t& ind, const Eigen::VectorXd& target_pos);

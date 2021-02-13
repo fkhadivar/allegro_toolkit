@@ -150,6 +150,7 @@ namespace control{
         
         Adaptive::~Adaptive(){}
         void Adaptive::update(const Eigen::VectorXd& c_state, const Eigen::VectorXd& d_state){
+            double dt = 0.005;
             Eigen::VectorXd rt= -B_r.transpose() * A_r * d_state;
             Eigen::VectorXd er = c_state - d_state;
             if (er.norm() > error_tol){
@@ -165,17 +166,17 @@ namespace control{
            
             for (size_t j = 0; j < ad_hsize; j++){   
                 double ker_sig = 0.02;
-                double alp_e = std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
+                double alp_e = 0.1*std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
                 
                 double alp_eX = alp_e;
                 double alp_eR = alp_e;
                 double normX = Px.row(j).norm();
                 double normR = Pr.row(j).norm(); 
-                if (normX < 1e-4){
+                if (normX < 1e-3){
                     normX = 1.;
                     alp_eX = 0;
                 }
-                if(normR < 1e-4){
+                if(normR < 1e-3){
                     normR = 1.;
                     alp_eR = 0;
                 }
@@ -188,8 +189,8 @@ namespace control{
                 imp_act = 1.;
             auto Px_ = Px;
             auto Pr_ = Pr;
-            Px -= Gamma * B_r.transpose()* P_l * er *  c_state.transpose() + imp_act * ThetaX * Px_;                     
-            Pr -= Gamma * B_r.transpose()* P_l * er *  rt.transpose()  + imp_act * ThetaR * Pr_;
+            Px -= (Gamma * B_r.transpose()* P_l * er *  c_state.transpose() + imp_act * ThetaX * Px_)*dt;                     
+            Pr -= (Gamma * B_r.transpose()* P_l * er *  rt.transpose()  + imp_act * ThetaR * Pr_)*dt;
 
             for (size_t j = 0; j < Px.rows(); j++){
                 for (size_t k = 0; k < Px.cols(); k++){
@@ -205,6 +206,14 @@ namespace control{
             }
 
             output =  Px * c_state + Pr * rt ;
+        }
+        Eigen::VectorXd Adaptive::get_impedance(){
+            Eigen::VectorXd imp;
+            imp.resize(Px.rows());
+            for (size_t i = 0; i < imp.size(); i++){
+                imp[i] =  0.5*(Px.row(i).norm() +  Pr.row(i).norm());
+            }
+            return imp;
         }
     
         
