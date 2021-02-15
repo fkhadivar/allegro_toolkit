@@ -166,7 +166,7 @@ namespace control{
            
             for (size_t j = 0; j < ad_hsize; j++){   
                 double ker_sig = 0.02;
-                double alp_e = 0.1*std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
+                double alp_e = 0.5*std::exp((-0.5/(ker_sig*ker_sig))*er(j)*er(j));
                 
                 double alp_eX = alp_e;
                 double alp_eR = alp_e;

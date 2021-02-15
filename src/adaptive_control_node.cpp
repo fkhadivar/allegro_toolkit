@@ -76,7 +76,7 @@ class HandRosMaster
         _plotter = _n.advertise<std_msgs::Float64MultiArray>("/hand/plotvar",1);
 
         // file for saving
-        std::string _fileName = "adaptive_stability_rot_2";
+        std::string _fileName = "adaptive_stability_rot_4";
         _outputFile.open(ros::package::getPath(std::string("allegro_toolkit"))+"/data_recording/"+_fileName+".csv");
         if(!_outputFile.is_open()){ ROS_ERROR("[Master]: Cannot open output file, the data directory might be missing");
             return false;

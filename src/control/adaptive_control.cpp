@@ -187,10 +187,12 @@ namespace control{
                 adGains(1) *= 1.;
                 adGains(2) *= 1.;
                 adGains(3) *= 1.;
-                Eigen::Vector4d imp = Eigen::Vector4d(0.25, 0.2, 0.15, 0.05);
+                Eigen::Vector4d imp = Eigen::Vector4d(0.25, 0.2, 0.15, 0.1);
 
                 for (size_t i = 0; i < _AD.size(); i++){
                     _AD[i]->setAdaptiveGains(adGains);
+                    if(i == 3)
+                        imp(3) = 0.15;
                     _AD[i]->setImpedance(imp);
                     _AD[i]->activateImpedance();
                     }
@@ -247,6 +249,7 @@ namespace control{
 
                 if (i==0)
                     plotVariable = erPos;
+                    // plotVariable = _AD[i]->get_impedance();
             }
  
             if (_step < 25)
