@@ -258,7 +258,7 @@ namespace control{
                 _data.push_back(positions[i]);
             for (size_t i = 0; i < 16; i++)
                 _data.push_back(impedances[i]);
-            for (size_t i = 0; i < 12; i++)
+            for (size_t i = 0; i < 16; i++)
                 _data.push_back(cmdTorque[i]);
             
             data_log = _data;
