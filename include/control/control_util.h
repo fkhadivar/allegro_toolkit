@@ -77,7 +77,7 @@ namespace control{
             bool is_impedance_active = false;
 
             double error_tol = 4e-1;
-            double max_value = 2e2;
+            double max_value = 1e2;
 
 
             Eigen::VectorXd output;

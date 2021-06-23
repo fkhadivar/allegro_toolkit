@@ -4,7 +4,7 @@
   <arg name="NUM" default="0" />
   <arg name="CONTROLLER" default="torque" />
   <arg name="RESPAWN" default="true" />
-  <arg name="VISUALIZE" default="true" />
+  <arg name="VISUALIZE" default="false" />
   <!-- <arg name="ZEROS" default="$(find allegro_hand_parameters)/zero_files/zero_SAH020BL016.yaml" /> -->
   
   <arg name="ZEROS" default="$(find allegro_hand_parameters)/zero.yaml" />
