@@ -3,6 +3,8 @@
 ## Dependencies:
 
 - Allegro Hand ROS:
+
+please read the description of the package in the following link: https://github.com/yias/allegro-hand-ros
 1) clone the package from the repo:
 ```bash
 $ git clone https://github.com/yias/allegro-hand-ros.git
