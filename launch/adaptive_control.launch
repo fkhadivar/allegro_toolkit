@@ -29,8 +29,8 @@
     <arg name="GAZEBO" value="$(arg GAZEBO)"/>
   </include>
 
-  <include file="$(find allegro_toolkit)/launch/vrpn_optitrack.launch">
-  </include>
+  <!-- <include file="$(find allegro_toolkit)/launch/vrpn_optitrack.launch">
+  </include> -->
 
   <node name="ad_control" pkg="allegro_toolkit" type="ad_control" output="screen">
   </node>

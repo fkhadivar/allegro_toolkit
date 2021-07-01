@@ -22,7 +22,7 @@
 
 
 #include <memory>
-#include "Utils.h" //? do we need this
+#include "Utils.h"
 #include "control/abs_control.hpp"
 #include "control/qp_solver.hpp"
 #include "robot/hand_robot.hpp"
