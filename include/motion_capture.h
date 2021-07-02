@@ -22,7 +22,7 @@
 #include <Eigen/Dense>
 #include <memory>
 #include <iostream>
-#include "Utils.h"
+#include "third_party/Utils.h"
 namespace environs{
 
     struct object{
