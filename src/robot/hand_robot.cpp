@@ -137,7 +137,8 @@ namespace robot{
             return H;
     }
     Eigen::VectorXd Hand::getCoriolisAndGravityForces(){
-        rbdl_model->gravity = gravity;
+        // rbdl_model->gravity = gravity;
+        rbdl_model->gravity << 9.81,0.0,0.0;
         Eigen::VectorXd TauGrav = Eigen::VectorXd::Zero(rbdl_model->q_size);
         Eigen::VectorXd QDDotGrav = Eigen::VectorXd::Zero(rbdl_model->q_size);
         RigidBodyDynamics::InverseDynamics (*rbdl_model, robot_states.pos, robot_states.vel, QDDotGrav, TauGrav);

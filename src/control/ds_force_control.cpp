@@ -125,28 +125,30 @@ namespace control {
             targetPositions[1] =  Eigen::Vector3d(.11, .015,.1);
             targetPositions[2] =  Eigen::Vector3d(.11, .065,.1);
             targetPositions[3] =  Eigen::Vector3d(.11, -.04,.05);
-
-            if (_step > 2000 ){
+            size_t step_jump = 1200;
+            if (_step > step_jump ){
                 targetPositions[0] =  Eigen::Vector3d(.08,-.07,.15);
                 targetPositions[1] =  Eigen::Vector3d(.08, -0.015,.15);
                 targetPositions[2] =  Eigen::Vector3d(.08, .055,.15);
                 targetPositions[3] =  Eigen::Vector3d(.08, -.05,.07);
+            } if (_step > 2*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.1,-.07,.08);
+                targetPositions[1] =  Eigen::Vector3d(.1, -0.015,.08);
+                targetPositions[2] =  Eigen::Vector3d(.1, .055,.08);
+                targetPositions[3] =  Eigen::Vector3d(.1, -.05,.04);
+
+            }if (_step > 3*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.08,-.07,.15);
+                targetPositions[1] =  Eigen::Vector3d(.08, -0.015,.15);
+                targetPositions[2] =  Eigen::Vector3d(.08, .055,.15);
+                targetPositions[3] =  Eigen::Vector3d(.08, -.05,.07);
+
+            } if(_step > 4*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.11,-.05,.1);
+                targetPositions[1] =  Eigen::Vector3d(.11, .015,.1);
+                targetPositions[2] =  Eigen::Vector3d(.11, .065,.1);
+                targetPositions[3] =  Eigen::Vector3d(.11, -.04,.05);
             }
-            
-            // if (_step > 1000)
-            // {
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.07,.15);
-            //     targetPositions[1] =  Eigen::Vector3d(.1,  0.,.15);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .07,.15);
-            //     targetPositions[3] =  Eigen::Vector3d(.05, -.05,.05);
-            // }
-            // if (_step > 1500)
-            // {
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.05,.08);
-            //     targetPositions[1] =  Eigen::Vector3d(.1,  0.,.08);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .05,.08);
-            //     targetPositions[3] =  Eigen::Vector3d(.05, .0,.0);
-            // }
 
             //*******get force from passie Ds
             Eigen::VectorXd positions = Eigen::VectorXd::Zero(12);
