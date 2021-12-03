@@ -21,6 +21,7 @@
 #define __ABSTRACT_Control__
 #include <fstream>
 #include <Eigen/Dense>
+#include <vector>
 #include "robot/abs_robot.hpp"
 #include "control/control_util.h"
 

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <Eigen/Dense>
+#include <vector>
 #include "control/qp_solver.hpp"
 
 
