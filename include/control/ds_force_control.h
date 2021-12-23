@@ -43,7 +43,10 @@ namespace control{
                 biotac
             */
             void setInput() override;
+            void setInput(const Eigen::Vector3d& pos0,const Eigen::Vector3d& pos1,const Eigen::Vector3d& pos2,const Eigen::Vector3d& pos3);
             Eigen::VectorXd getOutput() override;
+            Eigen::VectorXd getOutputTest();
+
             Eigen::VectorXd getPlotVariable();
 
             std::vector<std::string> get_data_header();
@@ -54,6 +57,7 @@ namespace control{
             void setNullPos(const Eigen::VectorXd& nullPose);
         protected:
             void algorithm() override;
+            void iterate();
 
             void updateHandBasePose(const Eigen::Matrix3d& ref2Base); //? do we need this?
             double _step = 0 ;
@@ -63,6 +67,7 @@ namespace control{
             Eigen::VectorXd cmdTorque;
             Eigen::VectorXd plotVariable;
             std::shared_ptr<control::util::PassiveDS> dsController;
+            std::vector<Eigen::Vector3d> desiredPositions;
 
         };
 

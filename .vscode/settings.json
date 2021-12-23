@@ -64,6 +64,19 @@
         "utils.h": "c",
         "boundingbox": "cpp",
         "boundingsphere": "cpp",
-        "timer": "cpp"
+        "timer": "cpp",
+        "csignal": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "unordered_set": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "bit": "cpp"
     }
 }

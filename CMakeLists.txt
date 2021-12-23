@@ -47,6 +47,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(${EIGEN3_INCLUDE_DIR} ${RBDL_INCLUDE_DIR} )
 include_directories(${qpOASES_INCLUDE_DIRS})
 
+add_executable(finger_pos_control src/node_finger_pos_controller.cpp src/robot/hand_robot.cpp src/control/ds_force_control.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/third_party/Utils.cpp)
+target_include_directories(finger_pos_control PUBLIC include ${catkin_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${qpOASES_INCLUDE_DIRS})
+target_link_libraries(finger_pos_control ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
+add_dependencies(finger_pos_control ${PROJECT_NAME}_gencpp)
 
 add_executable(ds_force src/ds_force_node.cpp src/robot/hand_robot.cpp src/control/ds_force_control.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/third_party/Utils.cpp)
 target_include_directories(ds_force PUBLIC include ${catkin_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${qpOASES_INCLUDE_DIRS})

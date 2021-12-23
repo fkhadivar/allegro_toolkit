@@ -65,10 +65,10 @@ class HandRosMaster
         _cmd_states.trq =Eigen::VectorXd::Zero(_allgeroHand->getDof());
 
 
-        _subJointSates = _n.subscribe("/allegroHand_0/joint_states",1,
+        _subJointStates = _n.subscribe("/allegroHand_0/joint_states",1,
         &HandRosMaster::updateHandStates,this,ros::TransportHints().reliable().tcpNoDelay());
 
-        _pubDesiredJointSates = _n.advertise<sensor_msgs::JointState>("desiredJointState",1);
+        _pubDesiredJointStates = _n.advertise<sensor_msgs::JointState>("desiredJointState",1);
         _pubJointCmd = _n.advertise<sensor_msgs::JointState>("/allegroHand_0/joint_cmd",  1);
         _pubTorqueCmd = _n.advertise<sensor_msgs::JointState>("/allegroHand_0/torque_cmd",1);
 
@@ -102,7 +102,7 @@ class HandRosMaster
 
             //todo send feedback to control class
             // _controller->setInput();
-            _cmd_states.trq = _controller->getOutput();
+            _cmd_states.trq = _controller->getOutputTest();
             publishHandStates(_cmd_states);
 
             Eigen::VectorXd plotVariable = _controller->getPlotVariable();
@@ -132,10 +132,10 @@ class HandRosMaster
     ros::NodeHandle _n;
     ros::Rate _loopRate;
 
-    ros::Subscriber _subJointSates;                   // Joint States of Allegro Hand
+    ros::Subscriber _subJointStates;                   // Joint States of Allegro Hand
     //ros::Subscriber _subJointCmd;                   // Joint Commands of Allegro Hand
 
-    ros::Publisher _pubDesiredJointSates;         //  Joint States of Allegro Hand
+    ros::Publisher _pubDesiredJointStates;         //  Joint States of Allegro Hand
     ros::Publisher _pubJointCmd;                  // Joint Commands of Allegro Hand for Position Mode
     ros::Publisher _pubTorqueCmd;                 // Torque Command for the Torque mode control
     
