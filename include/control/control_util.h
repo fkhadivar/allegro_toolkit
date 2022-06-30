@@ -1,8 +1,10 @@
 #ifndef _CONTROL_UTIL_
 #define _CONTROL_UTIL_
-#include "Utils.h" //? do we need this
+// #include "Utils.h" //? do we need this
 #include <fstream>
+#include <iostream>
 #include <Eigen/Dense>
+#include <vector>
 #include "control/qp_solver.hpp"
 
 

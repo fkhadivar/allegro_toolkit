@@ -1,0 +1,282 @@
+[
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/control/adaptive_control.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/adaptive_control.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/adaptive_control.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/motion_capture.cpp.o -c /home/farshad/git/allegro_toolkit/src/motion_capture.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/motion_capture.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -Dallegro_toolkit_EXPORTS -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g -fPIC   -std=c++14 -o CMakeFiles/allegro_toolkit.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/hand_ft_controller_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/hand_ft_controller_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/hand_ft_controller_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/control/hand_ft_controller.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/hand_ft_controller.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/hand_ft_controller.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_ft_controller.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/adaptive_control_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/adaptive_control_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/adaptive_control_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/control/adaptive_control.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/adaptive_control.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/adaptive_control.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ad_control.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/ds_force_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/ds_force_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/ds_force_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/control/ds_force_control.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/ds_force_control.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/ds_force_control.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/ds_force.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/hand_torque_sim_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/hand_torque_sim_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/hand_torque_sim_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/control/hand_ft_controller.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/hand_ft_controller.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/hand_ft_controller.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/third_party/sg_filter.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/sg_filter.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/sg_filter.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/hand_torque_sim.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/qp_control_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/qp_control_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/qp_control_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/control/qp_based_control.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_based_control.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_based_control.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/qp_control.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/power_grasp_node.cpp.o -c /home/farshad/git/allegro_toolkit/src/power_grasp_node.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/power_grasp_node.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/control/power_grasp_adaptive.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/power_grasp_adaptive.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/power_grasp_adaptive.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/power_grasp.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/node_finger_pos_controller.cpp.o -c /home/farshad/git/allegro_toolkit/src/node_finger_pos_controller.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/node_finger_pos_controller.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/robot/hand_robot.cpp.o -c /home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/robot/hand_robot.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/control/ds_force_control.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/ds_force_control.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/ds_force_control.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/control/qp_solver.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/qp_solver.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/control/control_util.cpp.o -c /home/farshad/git/allegro_toolkit/src/control/control_util.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/control/control_util.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"allegro_toolkit\\\" -I/home/farshad/git/allegro_toolkit/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/local/include  -g   -std=c++14 -o CMakeFiles/finger_pos_control.dir/src/third_party/Utils.cpp.o -c /home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp",
+  "file": "/home/farshad/git/allegro_toolkit/src/third_party/Utils.cpp"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gmock_main.dir/__/googletest/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.o -c /usr/src/googletest/googlemock/src/gmock-all.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /usr/src/googletest/googlemock/src/gmock_main.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gmock.dir/__/googletest/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /usr/src/googletest/googlemock/src/gmock-all.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock/gtest",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_main_EXPORTS -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /usr/src/googletest/googletest/src/gtest_main.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest_main.cc"
+},
+{
+  "directory": "/home/farshad/git/allegro_toolkit/build/gtest/googlemock/gtest",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_EXPORTS -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -g -fPIC    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++14 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc"
+}
+]

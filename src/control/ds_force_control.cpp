@@ -31,8 +31,19 @@ namespace control {
             addRobot(_robot);
             dsController = std::make_shared<control::util::PassiveDS>(params.psvLambda, params.psvDissip*params.psvLambda);
             nullPosition =  Eigen::VectorXd::Zero(robots[0]->getDof()); // todo move this to the hand
+            nullPosition.segment(12,4)<<0.6,1.2,0.3,0.3; 
+            desiredPositions.push_back(Eigen::Vector3d(.11,-.05,.1));
+            desiredPositions.push_back(Eigen::Vector3d(.11, .015,.1));
+            desiredPositions.push_back(Eigen::Vector3d(.11, .065,.1));
+            desiredPositions.push_back(Eigen::Vector3d(.11, -.04,.05));
+        
         }
-        void DsForceControl::setInput(){
+        void DsForceControl::setInput(){};
+        void DsForceControl::setInput(const Eigen::Vector3d& pos0,const Eigen::Vector3d& pos1,const Eigen::Vector3d& pos2,const Eigen::Vector3d& pos3){
+            desiredPositions[0] = pos0;
+            desiredPositions[1] = pos1;
+            desiredPositions[2] = pos2;
+            desiredPositions[3] = pos3;
         }
         void DsForceControl::setParams(Params& _params){
             params = _params;
@@ -50,12 +61,16 @@ namespace control {
             nullPosition = nullPose;
         }
 
-        Eigen::VectorXd DsForceControl::getOutput() {
+        Eigen::VectorXd DsForceControl::getOutputTest() {
             algorithm();
             //todo std:pair 
             return cmdTorque;
         }
-
+        Eigen::VectorXd DsForceControl::getOutput() {
+            iterate();
+            //todo std:pair 
+            return cmdTorque;
+        }
         std::vector<std::string> DsForceControl::get_data_header(){
             std::vector<std::string> _header;
             _header.push_back("finger_0_x");_header.push_back("finger_0_y");_header.push_back("finger_0_z");
@@ -93,7 +108,66 @@ namespace control {
         //    _baseQuat = Utils<double>::rotationMatrixToQuaternion(_Ref2Base);
 
         }
+        void DsForceControl::iterate(){
+             cmdTorque = Eigen::VectorXd::Zero(robots[0]->getDof());
+             //*******get force from passie Ds
+            Eigen::VectorXd positions = Eigen::VectorXd::Zero(12);
+            Eigen::VectorXd impedances = Eigen::VectorXd::Zero(16);
+            size_t numfingers = std::static_pointer_cast<robot::Hand>(robots[0])->finger.size();
+            for (size_t i = 0; i < numfingers ; i++){
+                Eigen::Vector3d fing_pos = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerPos(i);
+                //** get the Ds
+                if (_step < 10){
+                    desiredPositions[i] = fing_pos;
+                }
+                positions.segment(3*i,3) =  fing_pos - desiredPositions[i];
+                Eigen::Vector3d fing_vel = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerVel(i);
+                Eigen::MatrixXd fing_jacob = std::static_pointer_cast<robot::Hand>(robots[0])->getFingerJacob(i);
+                Eigen::VectorXd desDs = control::util::computeDsRBF(fing_pos, desiredPositions[i],params.dsGain,params.dsRbfGain,params.dsMaxVel);
+                dsController->update(fing_vel, desDs);
+                Eigen::Vector4d taskTorque = fing_jacob.transpose() * dsController->get_output();
+            
+                if (i==0)
+                    plotVariable = fing_pos -  desiredPositions[i];
+                // std::cout << "task command :" <<std::endl << taskTorque.transpose() << std::endl << std::endl; 
+                //**null control
+                Eigen::Vector4d nullTorque = control::util::getNullTorque(i,params.nullGain,nullPosition.segment(4*i,4),std::static_pointer_cast<robot::Hand>(robots[0])->finger[i].joint_states.pos,fing_jacob);               
 
+                //** sum up
+                cmdTorque.segment(4*i,4) = taskTorque + nullTorque;
+            }
+            //********compute the gravity compent
+            Eigen::Matrix3d baseRotMat;
+            baseRotMat = Eigen::AngleAxisd(-1*M_PI,Eigen::Vector3d::UnitX());
+            std::static_pointer_cast<robot::Hand>(robots[0])->rotateGravity(baseRotMat);
+            Eigen::VectorXd grvComp = std::static_pointer_cast<robot::Hand>(robots[0])->getCoriolisAndGravityForces(); 
+            cmdTorque +=  grvComp;
+
+            double EPSILON_FORCE = 1e-3;
+            Eigen::VectorXd trqLim = std::static_pointer_cast<robot::Hand>(robots[0])->getTrqLimits();
+
+            for (size_t i = 0; i < cmdTorque.size(); i++){
+                if (fabs(cmdTorque[i]) < EPSILON_FORCE )
+                    cmdTorque[i] = EPSILON_FORCE;
+                else if ( cmdTorque[i] >  trqLim[i] )
+                    cmdTorque[i] = trqLim[i];
+                else if ( cmdTorque[i] <  -trqLim[i])
+                    cmdTorque[i] = -trqLim[i];
+            }
+
+            std::vector<double> _data;
+            
+            for (size_t i = 0; i < 12; i++)
+                _data.push_back(positions[i]);
+            for (size_t i = 0; i < 16; i++)
+                _data.push_back(impedances[i]);
+            for (size_t i = 0; i < 16; i++)
+                _data.push_back(cmdTorque[i]);
+            
+            data_log = _data;
+
+            _step ++;
+        }
 
         void DsForceControl::algorithm(){
             cmdTorque = Eigen::VectorXd::Zero(robots[0]->getDof());
@@ -125,28 +199,30 @@ namespace control {
             targetPositions[1] =  Eigen::Vector3d(.11, .015,.1);
             targetPositions[2] =  Eigen::Vector3d(.11, .065,.1);
             targetPositions[3] =  Eigen::Vector3d(.11, -.04,.05);
-
-            if (_step > 2000 ){
+            size_t step_jump = 1200;
+            if (_step > step_jump ){
                 targetPositions[0] =  Eigen::Vector3d(.08,-.07,.15);
                 targetPositions[1] =  Eigen::Vector3d(.08, -0.015,.15);
                 targetPositions[2] =  Eigen::Vector3d(.08, .055,.15);
                 targetPositions[3] =  Eigen::Vector3d(.08, -.05,.07);
+            } if (_step > 2*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.1,-.07,.08);
+                targetPositions[1] =  Eigen::Vector3d(.1, -0.015,.08);
+                targetPositions[2] =  Eigen::Vector3d(.1, .055,.08);
+                targetPositions[3] =  Eigen::Vector3d(.1, -.05,.04);
+
+            }if (_step > 3*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.08,-.07,.15);
+                targetPositions[1] =  Eigen::Vector3d(.08, -0.015,.15);
+                targetPositions[2] =  Eigen::Vector3d(.08, .055,.15);
+                targetPositions[3] =  Eigen::Vector3d(.08, -.05,.07);
+
+            } if(_step > 4*step_jump){
+                targetPositions[0] =  Eigen::Vector3d(.11,-.05,.1);
+                targetPositions[1] =  Eigen::Vector3d(.11, .015,.1);
+                targetPositions[2] =  Eigen::Vector3d(.11, .065,.1);
+                targetPositions[3] =  Eigen::Vector3d(.11, -.04,.05);
             }
-            
-            // if (_step > 1000)
-            // {
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.07,.15);
-            //     targetPositions[1] =  Eigen::Vector3d(.1,  0.,.15);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .07,.15);
-            //     targetPositions[3] =  Eigen::Vector3d(.05, -.05,.05);
-            // }
-            // if (_step > 1500)
-            // {
-            //     targetPositions[0] =  Eigen::Vector3d(.1,-.05,.08);
-            //     targetPositions[1] =  Eigen::Vector3d(.1,  0.,.08);
-            //     targetPositions[2] =  Eigen::Vector3d(.1, .05,.08);
-            //     targetPositions[3] =  Eigen::Vector3d(.05, .0,.0);
-            // }
 
             //*******get force from passie Ds
             Eigen::VectorXd positions = Eigen::VectorXd::Zero(12);
