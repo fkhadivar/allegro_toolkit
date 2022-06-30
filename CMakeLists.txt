@@ -78,6 +78,12 @@ target_include_directories(hand_torque_sim PUBLIC include ${catkin_INCLUDE_DIRS}
 target_link_libraries(hand_torque_sim ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
 add_dependencies(hand_torque_sim ${PROJECT_NAME}_gencpp)
 
+add_executable(power_grasp src/power_grasp_node.cpp src/robot/hand_robot.cpp src/control/power_grasp_adaptive.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/third_party/Utils.cpp)
+target_include_directories(power_grasp PUBLIC include ${catkin_INCLUDE_DIRS} ${Eigen3_INCLUDE_DIRS} ${qpOASES_INCLUDE_DIRS})
+target_link_libraries(power_grasp ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${RBDL_LIBRARY} ${RBDL_URDFREADER_LIBRARY} ${qpOASES_LIBRARIES})
+add_dependencies(power_grasp ${PROJECT_NAME}_gencpp)
+
+
 FILE(GLOB SRCS src/control/adaptive_control.cpp src/control/qp_solver.cpp src/control/control_util.cpp src/robot/hand_robot.cpp src/motion_capture.cpp src/third_party/Utils.cpp)
 FILE(GLOB INCS include/control/adaptive_control.h include/control/qp_solver.hpp include/control/control_util.h include/robot/hand_robot.hpp include/robot/abs_robot.hpp include/control/abs_control.hpp src/motion_capture.h)
 
