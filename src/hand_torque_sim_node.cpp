@@ -1,7 +1,6 @@
-
 //|
 //|    Copyright (C) 2020 Learning Algorithms and Systems Laboratory, EPFL, Switzerland
-//|    Authors:  Farshad Khadivr (maintainer)
+//|    Authors:  Farshad Khadivar (maintainer)
 //|    email:   farshad.khadivar@epfl.ch
 //|    website: lasa.epfl.ch
 //|

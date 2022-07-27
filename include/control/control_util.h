@@ -1,16 +1,6 @@
-#ifndef _CONTROL_UTIL_
-#define _CONTROL_UTIL_
-// #include "Utils.h" //? do we need this
-#include <fstream>
-#include <iostream>
-#include <Eigen/Dense>
-#include <vector>
-#include "control/qp_solver.hpp"
-
-
 //|
 //|    Copyright (C) 2020 Learning Algorithms and Systems Laboratory, EPFL, Switzerland
-//|    Authors:  Farshad Khadivr (maintainer)
+//|    Authors:  Farshad Khadivar (maintainer)
 //|    email:   farshad.khadivar@epfl.ch
 //|    website: lasa.epfl.ch
 //|
@@ -26,6 +16,16 @@
 //|    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //|    GNU General Public License for more details.
 //|
+
+#ifndef _CONTROL_UTIL_
+#define _CONTROL_UTIL_
+// #include "Utils.h" //? do we need this
+#include <fstream>
+#include <iostream>
+#include <Eigen/Dense>
+#include <vector>
+#include "control/qp_solver.hpp"
+
 
 namespace control{
     namespace util{
@@ -78,8 +78,8 @@ namespace control{
             Eigen::MatrixXd Pr;
             bool is_impedance_active = false;
 
-            double error_tol = 4e-1;
-            double max_value = 1e2;
+            double error_tol = 5e-1;
+            double max_value = 5e1;
 
 
             Eigen::VectorXd output;

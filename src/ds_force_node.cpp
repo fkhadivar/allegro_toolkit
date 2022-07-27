@@ -1,20 +1,6 @@
-//** FARSHAD
-
-#include <mutex>
-#include <fstream>
-#include <pthread.h>
-#include "std_msgs/Float64MultiArray.h"
-#include "sensor_msgs/JointState.h"
-#include "geometry_msgs/PoseStamped.h"
-#include "ros/ros.h"
-#include <ros/package.h>
-#include <Eigen/Dense>
-#include "robot/hand_robot.hpp"
-#include "control/ds_force_control.h"
-
 //|
 //|    Copyright (C) 2020 Learning Algorithms and Systems Laboratory, EPFL, Switzerland
-//|    Authors:  Farshad Khadivr (maintainer)
+//|    Authors:  Farshad Khadivar (maintainer)
 //|    email:   farshad.khadivar@epfl.ch
 //|    website: lasa.epfl.ch
 //|
@@ -30,6 +16,18 @@
 //|    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //|    GNU General Public License for more details.
 //|
+
+#include <mutex>
+#include <fstream>
+#include <pthread.h>
+#include "std_msgs/Float64MultiArray.h"
+#include "sensor_msgs/JointState.h"
+#include "geometry_msgs/PoseStamped.h"
+#include "ros/ros.h"
+#include <ros/package.h>
+#include <Eigen/Dense>
+#include "robot/hand_robot.hpp"
+#include "control/ds_force_control.h"
 
 struct Options
 {
